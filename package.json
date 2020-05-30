@@ -1,5 +1,5 @@
 {
-  "name": "financial-advice-calendar",
+  "name": "facalendar",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.4",
+    "moment": "^2.25.3",
     "vue": "^2.6.11"
   },
   "devDependencies": {
