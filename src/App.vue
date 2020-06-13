@@ -123,8 +123,11 @@ export default {
   flex: 1;
   flex-wrap: wrap;
   justify-content: center;
+  background: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url('assets/nicobig.jpeg');
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-size: cover;
 }
-
 
 .loser {
   filter: grayscale(1);

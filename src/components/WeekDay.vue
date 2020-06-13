@@ -11,6 +11,7 @@
       v-if="feriados.some(f => day.currentDay.isSame(f.date, 'day'))"
       :class="$style.feriado">
       feriado
+      <div :class="$style.feriadoTitle">{{ feriados.find(f => day.currentDay.isSame(f.date, 'day')).title }}</div>
     </div>
     <div v-else>
       <div
@@ -51,12 +52,12 @@ export default {
   display: flex;
   flex-direction: column;
   width: 13%;
-  background: #ffffff;
+  background: #ffffff00;
   border: 1px silver solid;
   min-height: 149px;
 }
 .softOpacity {
-  background: #efefef !important;
+  background: #efefefbb !important;
 }
 .softOpacity > * {
   opacity: 0.4;
@@ -64,7 +65,7 @@ export default {
 }
 .headerDay {
   border: 1px silver solid;
-  background: #fefede;
+  background: #fefebe;
 }
 .feriado {
   font-weight: bold;
@@ -72,6 +73,7 @@ export default {
   color: red;
   text-transform: uppercase;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   height: 100%;
   align-items: center;
@@ -79,12 +81,15 @@ export default {
     font-size: 0.6em;
   }
 }
+.feriadoTitle {
+  font-size: 0.4em;
+}
 .scheduleRow {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid silver;
   margin: auto 7px;
   @media only screen and (max-device-width : 640px) {
     flex-direction: column;
