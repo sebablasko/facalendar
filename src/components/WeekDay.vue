@@ -17,7 +17,9 @@
       <div
         v-for="(appoinment, index) in day.schedule"
         :key="`${index}a`">
-        <div :class="$style.scheduleRow">
+        <div :class="[
+          $style.scheduleRow,
+          day.currentDay.isSame(today, 'day') && $style.today]">
           <span :class="$style.appoinmentName">{{ appoinment.name }}</span>
           <img :class="$style.miniProfile" :src="appoinment.selectedCandidate.img"/>
         </div>
@@ -69,7 +71,7 @@ export default {
 }
 .feriado {
   font-weight: bold;
-  font-size: 1.6em;
+  font-size: 1.3em;
   color: red;
   text-transform: uppercase;
   display: flex;
@@ -82,9 +84,10 @@ export default {
   }
 }
 .feriadoTitle {
-  font-size: 0.4em;
+  font-size: 0.5em;
 }
 .scheduleRow {
+  font-size: 0.9em;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -94,6 +97,9 @@ export default {
   @media only screen and (max-device-width : 640px) {
     flex-direction: column;
   }
+}
+.today {
+  font-weight: bold;
 }
 .appoinmentName {
   font-size: 1.0em;

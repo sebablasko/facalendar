@@ -1,38 +1,34 @@
 export default [
   {
-    name: 'Cumpleaños',
-    participants: 'nico',
-    startDate: '26-05-2019',
-    periodicity: 366,
-  },
-  {
-    name: 'Cumpleaños',
-    participants: 'seba',
-    startDate: '08-02-2020',
-    periodicity: 366,
+    name: 'Planning',
+    participants: 'all',
+    startDate: '20-04-2020',
+    occurrence: {
+      days: [0],
+    },
   },
   {
     name: 'Daily',
     participants: 'all',
     startDate: '20-04-2020',
-    periodicity: 1,
-  },
-  {
-    name: 'Planning',
-    participants: 'all',
-    startDate: '20-04-2020',
-    periodicity: 7,
+    occurrence: {
+      days: [1, 2, 3, 4],
+    },
   },
   {
     name: 'Chapter',
     participants: 'dev',
-    startDate: '21-04-2020',
-    periodicity: 7,
+    startDate: '25-04-2020',
+    occurrence: {
+      days: [1],
+    },
   },
   {
-    name: 'Tech debt',
+    name: 'Mejora Continua',
     participants: 'dev',
-    startDate: '23-04-2020',
-    periodicity: 7,
+    startDate: '20-04-2020',
+    occurrence: {
+      days: [3],
+    },
   },
 ];

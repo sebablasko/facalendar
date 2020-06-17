@@ -46,16 +46,11 @@ export default {
       return moment(undefined, undefined, 'es').date(1).day(1);
     },
     rangeDates() {
-      const range = [];
-      for (let i = 0; i < 35; ++i) {
-        const currentDay = moment(this.firstDayToShow).add(i, 'd');
-        if (currentDay.weekday() < 5) {
-          range.push({ currentDay, schedule: this.rolesForDate(currentDay) });
-        } else {
-          range.push({ currentDay });
-        }
-      }
-      return range;
+      return Array.from(Array(35).keys())
+        .map(i => ({
+          currentDay: moment(this.firstDayToShow).add(i, 'd'),
+          schedule: this.rolesForDate(moment(this.firstDayToShow).add(i, 'd')),
+        }));
     },
     rolesForToday() {
       return this.rolesForDate(this.selectedDate);
@@ -63,22 +58,18 @@ export default {
   },
   methods: {
     rolesForDate(d) {
-      const scheduledAppointments = this.events.map((e) => {
-        const startRuleDate = moment(e.startDate, 'DD-MM-YYYY', 'es');
-        const totalDays = d.diff(startRuleDate, 'days') 
-        const countedBussinesDays = this.getBusinessDays(startRuleDate, d);
-        const isActiveForToday = (totalDays % e.periodicity) === 0 && d.weekday() < 5;
-        if (isActiveForToday) {
-          const candidates = this.members.filter(x => x.groups.indexOf(e.participants) > -1);
-          const selectedCandidate = candidates[countedBussinesDays % candidates.length];
-          return { ...e, today: isActiveForToday, selectedCandidate };
-        }
-        return { ...e, today: isActiveForToday };
-      });
-      return scheduledAppointments.filter(x => x.today);
+      return events
+        .filter(x => x.occurrence.days.indexOf(d.weekday()) !== -1)
+        .map((e) => {
+          const candidates = members.filter(x => x.groups.indexOf(e.participants) > -1);
+          const countedBussinesDays = this.getBusinessDays(moment(e.startDate, 'DD-MM-YYYY', 'es'), d);
+          const workedDays = Math.floor(countedBussinesDays / 5) * e.occurrence.days.length + (countedBussinesDays % 5);
+          const selectedCandidate = candidates[workedDays % candidates.length];
+          return { ...e, selectedCandidate };
+        });
     },
     getBusinessDays(d1, d2) {
-      const totalDays = d2.diff(d1, 'days') + 1;
+      const totalDays = d2.diff(d1, 'days');
       let total = 0;
       for (let i = 0; i < totalDays; ++i) {
         if (d1.weekday() < 5) {
@@ -106,7 +97,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 .softOpacity {
   background: #efefef !important;
