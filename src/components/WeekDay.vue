@@ -53,7 +53,7 @@ export default {
 .day {
   display: flex;
   flex-direction: column;
-  width: 14.1%;
+  width: 13.8%;
   background: #ffffff00;
   border: 1px silver solid;
   min-height: 149px;
@@ -67,6 +67,7 @@ export default {
 }
 .headerDay {
   border: 1px silver solid;
+  font-size: 0.9em;
   background: #fefebe;
 }
 .feriado {
