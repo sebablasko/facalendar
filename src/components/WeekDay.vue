@@ -53,7 +53,7 @@ export default {
 .day {
   display: flex;
   flex-direction: column;
-  width: 13%;
+  width: 14.1%;
   background: #ffffff00;
   border: 1px silver solid;
   min-height: 149px;

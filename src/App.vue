@@ -96,6 +96,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  background: #ffffff;
   color: #2c3e50;
 }
 .softOpacity {
@@ -106,14 +107,13 @@ export default {
   filter: grayscale(1);
 }
 .calendar {
-  max-width: 1366px;
-  margin: 20px auto;
+  margin: 20px auto 0;
   display: flex;
   flex-direction: row;
   flex: 1;
   flex-wrap: wrap;
   justify-content: center;
-  background: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url('assets/nicobig.jpeg');
+  background: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url('assets/ronnabig.jpg');
   background-repeat: no-repeat;
   background-position-y: center;
   background-size: cover;
