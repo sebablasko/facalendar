@@ -113,10 +113,10 @@ export default {
   flex: 1;
   flex-wrap: wrap;
   justify-content: center;
-  background: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url('assets/ronnabig.jpg');
-  background-repeat: no-repeat;
-  background-position-y: center;
-  background-size: cover;
+  background: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url('assets/leonbig.jpg');
+  background-repeat: repeat-x;
+  background-position-y: top;
+  // background-size: cover;
 }
 
 .loser {
