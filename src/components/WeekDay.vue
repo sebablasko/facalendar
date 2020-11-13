@@ -1,7 +1,8 @@
 <template>
   <div :class="[
     $style.day,
-    day.currentDay.isBefore(today) && $style.softOpacity]">
+    day.currentDay.isBefore(today) && $style.softOpacity,
+    day.currentDay.isSame(today, 'day') && $style.todayTotal]">
     <!-- HEADER -->
     <div :class="$style.headerDay">
       {{ day.currentDay.format('dd DD-MM') }}
@@ -100,6 +101,34 @@ export default {
   }
 }
 .today {
+  font-weight: bold;
+}
+$moon: #c7c18b;
+$peak: #efedd8;
+@keyframes cresent{
+  0%{
+    transform: translate(0px, 0px) scale(1);
+    box-shadow: none;
+  }
+  33%{
+    transform: translate(0px, 0px) scale(1.3);
+    box-shadow: 0 0 10px lighten($moon, 30%), 0 0 80px 8px $moon;
+    background-color: $peak;
+    filter: brightness(105%);
+  }
+  66%{
+    transform: translate(0px, 0px) scale(1.3);
+    box-shadow: 0 0 10px lighten($moon, 30%), 0 0 80px 8px $moon;
+    background-color: $peak;
+    filter: brightness(105%);
+  }
+  100%{
+    transform: translate(0px, 0px) scale(1);
+    box-shadow: none;
+  }
+}
+.todayTotal {
+  animation: cresent 3s infinite;
   font-weight: bold;
 }
 .appoinmentName {

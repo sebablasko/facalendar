@@ -113,10 +113,10 @@ export default {
   flex: 1;
   flex-wrap: wrap;
   justify-content: center;
-  background: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url('assets/leonbig.jpg');
+  background: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url('assets/maxbig.jpeg');
   background-repeat: repeat-x;
   background-position-y: top;
-  // background-size: cover;
+  background-size: cover;
 }
 
 .loser {
@@ -136,12 +136,12 @@ $peak: #efdbd8;
     box-shadow: none;
   }
   50%{
-    transform: translate(0px, 0px) scale(1.02);
+    transform: translate(0px, 0px) scale(1.02) rotate(20deg);
     box-shadow: 0 0 10px lighten($moon, 30%), 0 0 80px 8px $moon;
     background-color: $peak;
   }
   100%{
-    transform: translate(0px, 0px) scale(1);
+    transform: translate(0px, 0px) scale(1) rotate(-10deg);
     box-shadow: none;
   }
 }
