@@ -64,7 +64,7 @@ export default {
 .content {
   display: flex;
   flex-direction: row;
-  margin-bottom: 0.3em;
+  margin: 0.75em 0.5em 1em;
   flex: 1;
 }
 .item {
