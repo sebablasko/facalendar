@@ -1,11 +1,12 @@
 <template>
   <div :class="[
     $style.day,
-    day.currentDay.isBefore(today) && $style.softOpacity,
     day.currentDay.isSame(today, 'day') && $style.todayTotal]">
     <!-- HEADER -->
     <div :class="$style.headerDay">
+    <div :class="$style.headerDayItem">
       {{ day.currentDay.format('dd DD-MM') }}
+    </div>
     </div>
     <!-- BODY -->
     <div
@@ -55,21 +56,17 @@ export default {
   display: flex;
   flex-direction: column;
   width: 13.8%;
-  background: #ffffff00;
   border: 1px silver solid;
+  background-color: #ffffff;
   min-height: 149px;
-}
-.softOpacity {
-  background: #efefefbb !important;
-}
-.softOpacity > * {
-  opacity: 0.4;
-  filter: grayscale(1);
 }
 .headerDay {
   border: 1px silver solid;
   font-size: 0.9em;
   background: #fefebe;
+}
+.headerDayItem {
+  display: block;
 }
 .feriado {
   font-weight: bold;
@@ -108,6 +105,7 @@ $peak: #efedd8;
 @keyframes cresent{
   0%{
     transform: translate(0px, 0px) scale(1);
+    background-color: #ffffff;
     box-shadow: none;
   }
   33%{
@@ -124,6 +122,7 @@ $peak: #efedd8;
   }
   100%{
     transform: translate(0px, 0px) scale(1);
+    background-color: #ffffff;
     box-shadow: none;
   }
 }
