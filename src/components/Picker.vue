@@ -27,7 +27,7 @@
 
 <script>
 import moment from 'moment';
-import members from '@/utils/members.js';
+import settings from '@/utils/settings.js';
 
 export default {
   name: 'Picker',
@@ -36,6 +36,14 @@ export default {
       type: Object,
       default: () => moment(),
     },
+  },
+  data() {
+    return {
+      members: settings.members,
+      selectedMembers: [],
+      winner: undefined,
+      processing: false,
+    };
   },
   methods: {
     moment,
@@ -63,14 +71,6 @@ export default {
       }
     },
   },
-  data() {
-    return {
-      members,
-      selectedMembers: [],
-      winner: undefined,
-      processing: false,
-    };
-  },
   created() {
     moment.locale('es');
   },
@@ -78,6 +78,8 @@ export default {
 </script>
 
 <style module lang="scss">
+@import '@/style.scss';
+
 .content {
   display: flex;
   flex-direction: column;
@@ -87,6 +89,8 @@ export default {
   display: flex;
   flex-direction: row;
   padding: 0.5em;
+  transform-style: preserve-3d;
+  perspective: 2000px;
 }
 .selector {
   display: flex;
@@ -98,17 +102,19 @@ export default {
   border-radius: 7%;
   width: 7.5em;
   height: 7.5em;
-  border: 0.5em white solid;
-  opacity: 0.2;
+  border: 0.5em $primary-color solid;
+  opacity: 0.15;
   margin: 0.1em;
   cursor: pointer;
   transition: transform 3s infinte;
 }
 .selected {
   opacity: 1;
+  border: 0.5em lighten($primary-color, 10%) solid;
 }
 .procesing {
-  animation: spin 14s;
+  // animation: spin 14s;
+  animation: square 7s linear infinite alternate;
 }
 @keyframes spin {
   0% {
@@ -125,25 +131,49 @@ export default {
 .winner {
   width: 7em;
   height: 7em;
-  border: 0.5em #fef79f solid;
+  border: 0.5em darken($primary-color, 30%) solid;
   animation: blink 1s infinite;
 }
 @keyframes blink{
   0%{
     transform: scale(1.1);
-    box-shadow: 0 0 10px lighten(lightblue, 30%), 0 0 80px 8px lightblue;
+    box-shadow: 0 0 10px lighten($primary-color, 30%), 0 0 80px 8px $primary-color;
   }
   50%{
     transform: scale(0.9);
-    box-shadow: 0 0 10px lighten(lightblue, 30%), 0 0 60px 2px lightblue;
+    box-shadow: 0 0 10px lighten($primary-color, 30%), 0 0 60px 2px $primary-color;
   }
   100%{
     transform: scale(1.1);
-    box-shadow: 0 0 10px lighten(lightblue, 30%), 0 0 70px 2px lightblue;
+    box-shadow: 0 0 10px lighten($primary-color, 30%), 0 0 70px 2px $primary-color;
   }
 }
 .controls {
   display: flex;
   justify-content: center;
 }
+
+@keyframes square {
+  0%{
+    opacity: 1;
+  }
+  @for $i from 1 through 9 {
+    #{($i * 10%)} {
+      transform: translate3d( (random($i) * 1em) , (random($i) * 1em), (random($i) * 1em) ) scale($i) rotate(($i * 360deg));
+    }
+  }
+  98%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+// @for $i from 1 through 9 {
+//   .procesing:nth-child(#{$i}){
+//     animation-delay: ($i * -.15s);
+//     transform: translateZ($i * 20px);
+//   }
+// }
 </style>

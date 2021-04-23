@@ -5,12 +5,16 @@
       :key="`${i}-d`"
       :class="[
         $style.day,
+        feriados.some(f => d.date.isSame(f.fecha, 'day')) && $style.feriado,
         d.date.isBefore(today, 'date') && $style.past,
         d.date.isSame(today, 'date') && $style.today,
         d.date.isSame(selected, 'date') && $style.selected,
         [0, 6].includes(d.date.day()) && $style.weekend,
       ]"
       @click="selectEvent(d)">
+      <div
+        v-if="feriados.some(f => d.date.isSame(f.fecha, 'day'))"
+        :class="$style.feriadoLabel"/>
       <div :class="$style.dayNumber">{{ d.date.format('D') }}</div>
       <div :class="$style.dayName">{{ d.date.format('ddd').replace('.', '') }}</div>
     </div>
@@ -19,6 +23,7 @@
 
 <script>
 import moment from 'moment';
+import feriados from '@/utils/feriados.js';
 
 export default {
   name: 'Timeline',
@@ -44,6 +49,7 @@ export default {
   },
   data() {
     return {
+      feriados: [],
     };
   },
   created() {
@@ -72,6 +78,16 @@ export default {
     background: lightcyan;
     transform: translate(0px, 0px) scale(1.05);
   }
+}
+
+.feriado {
+  background: tomato !important;
+}
+
+.feriadoLabel {
+  background-color: peru;;
+  position: absolute;
+  top: -1.5em;
 }
 
 .dayNumber {

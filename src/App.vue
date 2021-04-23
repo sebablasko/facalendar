@@ -1,25 +1,20 @@
 <template>
   <div :class="$style.app">
-    <day-header :selected="selected"/>
+    <day-header :selected="selected" @toggle="teamToggle"/>
     <birthdays :selected="selected"/>
-    <div :class="$style.row">
-      <daily-selector
-        title="Principal Advice"
-        :selected-date="selected"
-        :participants="principalTeam"
-        />
-      <daily-selector
-        title="Cuprum Advice"
-        :selected-date="selected"
-        :participants="cuprumTeam"
-        />
-      <daily-selector
-        title="Engineering Chapter"
-        weekly
-        :selected-date="selected"
-        :participants="engineeringTeam"
-        />
-    </div>
+    <transition name="fade">
+      <div v-show="!changing" :class="$style.row">
+        <ceremony
+          v-for="c in ceremonies"
+          :key="c.name"
+          :title="c.name"
+          :selected-date="selected"
+          :participants="c.participants"
+          :periodicity="c.periodicity"
+          :periodicity-payload="c.periodicity_payload"
+          />
+      </div>
+    </transition>
     <memos v-show="false" :selected="selected" style="display: flex; flex: 2;"/>
     <div :class="$style.footer">
       <timeline
@@ -36,11 +31,11 @@ import moment from 'moment';
 import DayHeader from '@/components/DayHeader'
 import Timeline from '@/components/Timeline'
 import Birthdays from '@/components/Birthdays'
-import DailySelector from '@/components/DailySelector'
+import Ceremony from '@/components/Ceremony'
 import Memos from '@/components/Memos'
 import Picker from '@/components/Picker'
 
-import members from '@/utils/members.js';
+import settings from '@/utils/settings.js';
 
 export default {
   name: 'App',
@@ -48,31 +43,28 @@ export default {
     DayHeader,
     Timeline,
     Birthdays,
-    DailySelector,
+    Ceremony,
     Memos,
     Picker,
   },
+  data() {
+    return {
+      selected: moment(),
+      selectedTeam: 'principal',
+      changing: false,
+    };
+  },
   computed: {
-    principalTeam() {
-      return members
-        .filter(x => x.groups.includes('daily'))
-        .filter(x => x.groups.includes('principal'));
-    },
-    cuprumTeam() {
-      return members
-        .filter(x => x.groups.includes('daily'))
-        .filter(x => x.groups.includes('cuprum'));
-    },
-    engineeringTeam() {
-      return members
-        .filter(x => x.groups.includes('dev'));
-    },
-    dataset() {
-      const firstDay = moment().set('date', 1);
-      return [...Array(5 * 7).keys()].map(x => ({
-        date: moment(firstDay).add(x, 'd'),
-        items: [],
-      }));
+    ceremonies() {
+      const allCeremonies = [
+        ...settings.teams.find(x => x.id === this.selectedTeam).ceremonies,
+        ...settings.globalCeremonies,
+      ];
+      return allCeremonies
+        .map(x => ({
+          ...x,
+          participants: settings.members.filter(y => x.participants.includes(y.id))
+        }));
     },
     month() {
       const firstDay = moment().set('date', 1);
@@ -87,11 +79,40 @@ export default {
     selectDate(date){
       this.selected = moment(date);
     },
-  },
-  data() {
-    return {
-      selected: moment(),
-    };
+    teamToggle() {
+      this.changing = true;
+      const particles = settings.teams
+        .find(x => x.id !== this.selectedTeam)
+        .ceremonies[0]
+        .participants
+        .map(x => ({
+          type: 'image',
+          url: settings.members.find(y => y.id === x).img,
+          size: 15 + Math.floor(Math.random() * 10),
+          }),
+        )
+      this.$confetti.start({
+        particlesPerFrame: 0.75,
+        windSpeedMax: 2,
+        defaultDropRate: 10,
+        defaultColors: [
+          '#78bbe8',
+        ],
+        particles: [
+          { type: 'heart', size: 50 },
+          ...particles,
+        ],
+      });
+      setTimeout(() => {
+        this.$confetti.stop();
+      }, 2000);
+      setTimeout(() => {
+        this.changing = false;
+        this.selectedTeam = (this.selectedTeam === 'cuprum')
+          ? 'principal'
+          : 'cuprum';
+      }, 500);
+    }
   },
   created() {
     moment.locale('es');
@@ -103,9 +124,7 @@ export default {
 <style module lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Chettan+2&display=swap');
-
-$dot-color: silver;
-$bg-color: #fffbcc;
+@import '@/style.scss';
 
 // Dimensions
 $dot-size: 2px;
@@ -150,5 +169,13 @@ body {
   flex: 1;
   position: fixed;
   bottom: 0;
+}
+</style>
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

@@ -5,13 +5,16 @@
       <span
         v-for="(w, index) in widgetsAvailable"
         :key="index"
-        :class="$style.link"
+        :class="[
+          $style.link,
+          w.new && $style.new,
+        ]"
         @click="select(index)">{{ w.name }}</span>
     </div>
     <div v-if="selected !== undefined" :class="$style.modal">
       <card>
         <template v-slot:title>
-          Chuasi
+          {{ currentTitle }}
         </template>
         <template v-slot:body>
           <div
@@ -30,9 +33,13 @@
 <script>
 import Card from '@/components/Card';
 import Picker from '@/components/Picker'
+import Covid from '@/components/Covid'
+import Branches from '@/components/Branches'
 
 const widgetsAvailable = [
-  { name: 'Chuasi', component: Picker },
+  { name: 'Chuasi', component: Picker, new: false },
+  // { name: 'Covid', component: Covid },
+  { name: 'Branches', component: Branches, new: true },
 ];
 
 export default {
@@ -53,6 +60,11 @@ export default {
     },
   },
   computed: {
+    currentTitle() {
+      if (this.selected !== undefined) {
+        return widgetsAvailable[this.selected].name;
+      }
+    },
     currentComponent() {
       if (this.selected !== undefined) {
         return widgetsAvailable[this.selected].component;
@@ -63,11 +75,16 @@ export default {
 </script>
 
 <style module lang="scss">
+@import '@/style.scss';
+
 .content {
   display: flex;
   flex-direction: row;
   flex: 1;
   font-family: 'Baloo Chettan 2', cursive;
+  position: absolute;
+  bottom: -1.5em;
+  right: 0;
 }
 .empty {
   display: flex;
@@ -76,10 +93,9 @@ export default {
 .links {
   display: flex;
   flex-direction: row;
-  background: #fef79f;
-  box-shadow: 0 0.005em 0.05em gray;
+  background: $primary-color;
+  box-shadow: 0 0.3px 0.0001em gray;
   padding-right: 4em;
-  border-left: 0.3em #d6cf71 solid;
 }
 .link {
   cursor: pointer;
@@ -87,6 +103,21 @@ export default {
   align-items: center;
   padding: 0 1em;
   font-size: 1.1em;
+  position: relative;
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}
+.new {
+  &::after {
+    content: 'new';
+    position: absolute;
+    font-size: 0.8em;
+    bottom: 1.2em;
+    right: 0.75em;
+    background-color: darken($primary-color, 30%);
+    line-height: 1em;
+  }
 }
 .modal {
   position: fixed;

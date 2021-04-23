@@ -10,10 +10,10 @@
     </div>
     <!-- BODY -->
     <div
-      v-if="feriados.some(f => day.currentDay.isSame(f.date, 'day'))"
+      v-if="feriados.some(f => day.currentDay.isSame(f.fecha, 'day'))"
       :class="$style.feriado">
       feriado
-      <div :class="$style.feriadoTitle">{{ feriados.find(f => day.currentDay.isSame(f.date, 'day')).title }}</div>
+      <div :class="$style.feriadoTitle">{{ feriados.find(f => day.currentDay.isSame(f.fecha, 'day')).title }}</div>
     </div>
     <div v-else>
       <div

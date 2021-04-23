@@ -19,8 +19,8 @@
             <img :class="$style.photo" :src="mem.img"/>
           </div>
           <div :class="$style.info">
-            {{ moment(mem.birthday, 'DD/MM').add(1, 'd').from(selected) }}
-            <div :class="$style.infoSmall">{{ moment(mem.birthday, 'DD/MM').format('dddd D MMMM') }} </div>
+            <div :class="$style.infoBig">{{ moment(mem.birthday, 'DD/MM').add(1, 'd').from(selected) }}</div>
+            <div :class="$style.infoSmall">{{ moment(mem.birthday, 'DD/MM').format('dddd D MMMM') }}</div>
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@
 <script>
 import moment from 'moment';
 import Card from '@/components/Card';
-import members from '@/utils/members.js';
+import settings from '@/utils/settings.js';
 
 export default {
   name: 'Birthdays',
@@ -51,7 +51,8 @@ export default {
   },
   data() {
     return {
-      members: members.sort((a,b) => moment(a.birthday, 'DD/MM').format('YYYYMMDD') - moment(b.birthday, 'DD/MM').format('YYYYMMDD')),
+      members: [...settings.members]
+        .sort((a,b) => moment(a.birthday, 'DD/MM').format('YYYYMMDD') - moment(b.birthday, 'DD/MM').format('YYYYMMDD')),
     };
   },
   created() {
@@ -61,20 +62,23 @@ export default {
 </script>
 
 <style module lang="scss">
+@import '@/style.scss';
+
 .content {
   display: flex;
   flex-direction: row;
   margin: 0.75em 0.5em 1em;
+  justify-content: center;
+  flex-wrap: wrap;
   flex: 1;
 }
 .item {
   display: flex;
-  flex: 1;
   flex-direction: column;
-  padding: 0.01em;
-  margin: 0;
+  margin: 0.7em 0;
   align-items: center;
   position: relative;
+  flex-basis: 12%;
 }
 .photoDiv {
   margin: 0;
@@ -92,41 +96,44 @@ export default {
     content: " ";
     display: block;
     position: absolute;
-    height: 4.5em;
-    width: 4.5em;
+    height: 3em;
+    width: 3em;
     left: 0.3em;
-    top: -2.9em;
+    top: -1.9em;
     z-index: 1;
     animation: blink 1s infinite;
   }
 }
 .photo {
   border-radius: 10%;
-  width: 4.5em;
+  width: 3.5em;
   box-shadow: 0 0.1px 0.1em gray;
 }
 .info {
-  min-width: 85%;
+  min-width: 65%;
   display: flex;
+  flex-direction: column;
   color: black;
-  background: rgba(255, 238, 0, 0.9);
+  background: lighten($primary-color, 25%);
   text-align: center;
   position: absolute;
-  font-size: 0.75em;
   font-style: italic;
-  flex-direction: column;
   justify-content: center;
-  padding-bottom: 3px;
-  top: 4.75em;
-  box-shadow: 0 0.1px 0.1em gray;
+  top: 3em;
+  box-shadow: 0 0.2px 0.001em gray;
+}
+.infoBig {
+  font-size: 0.85em;
+  line-height: 1.2em;
 }
 .infoSmall {
   display: flex;
   font-size: 0.5em;
   font-style: italic;
   flex-direction: column;
-  margin: 0 0.2em;
   justify-content: center;
+  line-height: 1em;
+  background-color: darken($primary-color, 10%);
 }
 @keyframes blink{
   0%{

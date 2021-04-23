@@ -19,6 +19,8 @@ export default {
 </script>
 
 <style module lang="scss">
+@import '@/style.scss';
+
 .content {
   display: flex;
   flex-direction: column;
@@ -31,8 +33,8 @@ export default {
 }
 .title {
   display: flex;
-  background: white;
-  padding: 0 2em;
+  background: $primary-color;
+  padding: 0 1em;
   box-shadow: 0 0.1em 0.1em silver;
   font-size: 1.2em;
   justify-content: center;
@@ -44,7 +46,7 @@ export default {
 }
 .body {
   display: flex;
-  background: white;
+  background: $primary-color;
   box-shadow: 0 0.1em 0.1em silver;
 }
 </style>

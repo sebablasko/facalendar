@@ -38,10 +38,11 @@ import moment from 'moment';
 import Card from '@/components/Card';
 import beach from '@/assets/beach.png';
 
+const WORKING_DAYS = [0, 1, 2, 3, 4]
 const START_DATE = moment('2021-01-01', 'YYYY-MM-DD');
 
 export default {
-  name: 'DailySelector',
+  name: 'Ceremony',
   components: {
     Card,
   },
@@ -63,44 +64,44 @@ export default {
       type: Array,
       default: () => [],
     },
-    singleDay: {
-      type: Number,
-      default: undefined,
+    periodicity: {
+      type: String,
+      default: 'DAYS_AT_WEEK',
+    },
+    periodicityPayload: {
+      type: Array,
+      default: () => [],
     },
   },
   computed: {
     isWorkingDay() {
-      if (this.singleDay) {
-        return this.selectedDate.weekday() === this.singleDay;
+      if (this.periodicity === 'DAYS_AT_WEEK') {
+        return this.periodicityPayload.some(x => x === this.selectedDate.weekday());
       }
-      return !(this.selectedDate.weekday() === 5 || this.selectedDate.weekday() === 6);
+      return false;
     },
     totalBusinessDays() {
       let total = 0;
       const d1 = moment(START_DATE);
       while (d1.isBefore(this.selectedDate, 'date')) {
-        total += 1;
         // TODO: discount feriados
-        if (this.singleDay) {
-          if (d1.weekday() !== this.singleDay) {
-            total -= 1;
-          }
-        } else {
-          if (d1.weekday() === 5) {
-            total -= 1;
-          }
-          if (d1.weekday() === 6) {
-            total -= 1;
-          }
+        if (this.periodicity === 'DAYS_AT_WEEK' && this.periodicityPayload.includes(d1.weekday())) {
+          total += 1;
         }
         d1.add(1, 'd');
       }
       return total;
     },
     winner() {
+      if (this.participants.length === 0) {
+        return { name: undefined, img: undefined };
+      }
       return this.participants[this.totalBusinessDays%this.participants.length];
     },
     next() {
+      if (this.participants.length === 0) {
+        return { name: undefined, img: undefined };
+      }
       return this.participants[(this.totalBusinessDays+1)%this.participants.length];
     },
   },
