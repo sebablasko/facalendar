@@ -13,19 +13,17 @@
     </div>
     <transition name="fade">
       <div v-if="selected !== undefined" :class="$style.modal">
-        <div :class="[currentComponent.scrolleable && $style.modalScroll]">
+        <div :class="[
+          $style.modalContent,
+          currentComponent.scrolleable && $style.modalScroll,
+          ]">
           <card>
             <template v-slot:title>
               {{ currentComponent.name }}
             </template>
             <template v-slot:body>
-              <div
-                :class="$style.exit"
-                @click="select(undefined)"
-                >
-                X
-              </div>
-              <component :is="currentComponent.component"></component>
+              <div :class="$style.exit" @click="select(undefined)"> X </div>
+              <component :is="currentComponent.component" @refresh="() => { select(undefined); $emit('refresh'); }"></component>
             </template>
           </card>
         </div>
@@ -135,10 +133,16 @@ export default {
   overflow-y: overlay;
   max-height: 100%;
 }
+.modalContent {
+  display: flex;
+  margin: 0 1em;
+  flex: 1;
+}
 .exit {
   cursor: pointer;
   position: absolute;
-  right: 1em;
+  right: 0.3em;
+  top: -0.2em;
   font-size: 3em;
   font-weight: bold;
 }

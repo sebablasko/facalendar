@@ -8,7 +8,7 @@
       <span :class="$style.teamTitle">{{ t.name }}</span>
       <div
         v-for="(c, ci) in t.ceremonies"
-        :key="c.name"
+        :key="ci"
         :class="$style.ceremoniesRow">
           <div :class="$style.formInput">
             <input v-model="c.name"/>
@@ -19,7 +19,7 @@
               <label :for="day">{{day}}</label>
             </span>
           </div>
-          <div :class="$style.formInput" style="flex: 1 0 45%; justify-content: center; flex-wrap: wrap;">
+          <div :class="$style.formInput" style="flex: 1 0 40%; justify-content: center; flex-wrap: wrap;">
             <img
               v-for="m in members"
               :key="m.id"
@@ -31,7 +31,7 @@
               @click="toggeMember(t.id, c.name, m.id)">
           </div>
           <div :class="$style.formInput">
-            <button @click="t.ceremonies.splice(ci, 1)">x</button>
+            <button @click="deleteCeremony(t.ceremonies, ci)">borrar</button>
           </div>
       </div>
       <button
@@ -55,7 +55,7 @@
               <label :for="day">{{day}}</label>
             </span>
           </div>
-          <div :class="$style.formInput" style="flex: 1 0 45%; justify-content: center; flex-wrap: wrap;">
+          <div :class="$style.formInput" style="flex: 1 0 40%; justify-content: center; flex-wrap: wrap;">
             <img
               v-for="m in members"
               :key="m.id"
@@ -67,7 +67,7 @@
               @click="toggeMemberForCommonCeremonies(c.name, m.id)">
           </div>
           <div :class="$style.formInput">
-            <button @click="commonCeremonies.splice(ci, 1)">x</button>
+            <button @click="deleteCeremony(commonCeremonies, ci)">borrar</button>
           </div>
       </div>
       <button
@@ -77,8 +77,8 @@
     <div :class="$style.row">
       <div style="flex: 1;" />
       <div :class="$style.actions">
-        <button @click="reset">Restablecer</button>
-        <button @click="reset">Guardar</button>
+        <button @click="reset" :disabled="loading">Cancelar cambios</button>
+        <button @click="save" :disabled="loading">Guardar</button>
       </div>
     </div>
   </div>
@@ -87,6 +87,8 @@
 <script>
 import moment from 'moment';
 import settings from '@/utils/settings.js';
+import store from '@/store.js'
+import axios from 'axios';
 
 export default {
   name: 'Settings',
@@ -94,6 +96,7 @@ export default {
     return {
       teams: [],
       commonCeremonies: [],
+      loading: false,
     };
   },
   computed: {
@@ -106,8 +109,8 @@ export default {
   },
   methods: {
     reset() {
-      this.teams = JSON.parse(JSON.stringify(settings)).teams;
-      this.commonCeremonies =  JSON.parse(JSON.stringify(settings)).globalCeremonies;
+      this.teams = JSON.parse(JSON.stringify(store.settings)).teams;
+      this.commonCeremonies =  JSON.parse(JSON.stringify(store.settings)).globalCeremonies;
     },
     toggeMember(teamId, ceremonyName, memberId) {
       const participans = this.teams
@@ -131,10 +134,28 @@ export default {
         participans.push(memberId);
       }
     },
+    deleteCeremony(list, index) {
+      if (confirm('¿Estás seguro?')) {
+        list.splice(index, 1)
+      }
+    },
+    save() {
+      this.loading = true;
+      const payload = {
+        teams: JSON.parse(JSON.stringify(this.teams)),
+        globalCeremonies: JSON.parse(JSON.stringify(this.commonCeremonies)),
+      };
+      axios.post('https://users.dcc.uchile.cl/~sblasco/facalendar/', payload)
+        .then((x) => {
+          store.settings = x.data;
+          this.$emit('refresh');
+        });
+    },
   },
   created() {
     moment.locale('es');
     this.reset();
+    this.loading = false;
   },
 };
 </script>
@@ -163,7 +184,7 @@ export default {
 .team {
   display: flex;
   flex-direction: column;
-  margin: 0.5em;
+  margin: 1em 0;
   border-left: 0.3em var(--dark-primary-color-30) solid;
   background-color: var(--light-primary-color-70);
   padding: 0.5em 0.5em 0.8em;
@@ -173,7 +194,7 @@ export default {
   flex: 1;
   flex-direction: row;
   margin: 0.75em 0;
-  align-items: flex-end;
+  align-items: center;
 }
 .formInput {
   display: flex;
@@ -185,7 +206,7 @@ export default {
   cursor: pointer;
 }
 .memberImgInactive {
-  opacity: 0.2;
+  opacity: 0.15;
 }
 .addButton {
   margin-top: 0.75em;
@@ -197,7 +218,7 @@ export default {
 .actions {
   display: flex;
   padding: 0.5em;
-  background-color: var(--light-primary-color-30);
+  background-color: var(--light-primary-color-70);
   & > button {
     margin: 0 1em;
   }

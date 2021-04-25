@@ -14,7 +14,7 @@
         @change="() => $emit('toggle')"
       />
     </div>
-    <widgets/>
+    <widgets @refresh="$emit('refresh')"/>
   </div>
 </template>
 
@@ -43,8 +43,8 @@ export default {
     toggle() {
       return {
         labels: { checked: 'Principal', unchecked: 'Cuprum' },
-        color: { checked: '#3b9cdd', unchecked: '#fdf04d'  },
-        switchColor: { checked: 'linear-gradient(to right, #3b9cdd 20%, #ffffff)', unchecked: 'linear-gradient(to right, #ffffff 20%, #fdf04d)' },
+        color: { checked: '#1cb0e4', unchecked: '#f6b12a'  },
+        switchColor: { checked: 'linear-gradient(to right, #1cb0e4 20%, #ffffff)', unchecked: 'linear-gradient(to right, #ffffff 20%, #f6b12a)' },
         fontSize: 22,
         width: 125,
         height: 30,

@@ -46,8 +46,11 @@ export default {
 }
 .body {
   display: flex;
+  flex: 1;
   background-color: var(--primary-color);
   box-shadow: 0 0.1em 0.1em silver;
   transition: background-color 0.5s linear;
+  flex-direction: column;
+  position: relative;
 }
 </style>

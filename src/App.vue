@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.app">
-    <day-header :selected="selected" @toggle="teamToggle"/>
+    <day-header :selected="selected" @toggle="teamToggle" @refresh="refresh"/>
     <birthdays :selected="selected"/>
     <transition name="fade">
       <div v-show="!changing" :class="$style.row">
@@ -28,6 +28,7 @@
 
 <script>
 import moment from 'moment';
+import axios from 'axios';
 
 import DayHeader from '@/components/DayHeader'
 import Timeline from '@/components/Timeline'
@@ -37,6 +38,7 @@ import Memos from '@/components/Memos'
 import Picker from '@/components/Picker'
 
 import settings from '@/utils/settings.js';
+import store from '@/store.js'
 
 export default {
   name: 'App',
@@ -52,20 +54,25 @@ export default {
     return {
       selected: moment(),
       selectedTeam: settings.teams[0].id,
-      changing: false,
+      changing: true,
     };
   },
   computed: {
-    ceremonies() {
-      const allCeremonies = [
-        ...settings.teams.find(x => x.id === this.selectedTeam).ceremonies,
-        ...settings.globalCeremonies,
-      ];
-      return allCeremonies
-        .map(x => ({
-          ...x,
-          participants: settings.members.filter(y => x.participants.includes(y.id))
-        }));
+    ceremonies: {
+      cache: false,
+      get: function() {
+        const allCeremonies = [
+          //...settings.teams.find(x => x.id === this.selectedTeam).ceremonies,
+          //...settings.globalCeremonies,
+          ...store.settings.teams.find(x => x.id === this.selectedTeam).ceremonies,
+          ...store.settings.globalCeremonies,
+        ];
+        return allCeremonies
+          .map(x => ({
+            ...x,
+            participants: settings.members.filter(y => x.participants.includes(y.id))
+          }));
+      },
     },
     month() {
       const firstDay = moment().set('date', 1);
@@ -77,6 +84,9 @@ export default {
     },
   },
   methods: {
+    refresh() {
+      this.$forceUpdate();
+    },
     selectDate(date){
       this.selected = moment(date);
     },
@@ -96,8 +106,8 @@ export default {
         windSpeedMax: 2,
         defaultDropRate: 10,
         defaultColors: [
-          '#78bbe8',
-          '#fef79f',
+          '#35b9e7',
+          '#f7b941',
         ],
         particles: [
           { type: 'heart', size: 50 },
@@ -106,7 +116,6 @@ export default {
       });
     },
     teamToggle() {
-      console.log('toggle');
       this.changing = true;
       const teams = settings.teams.map(x => x.id)
       const newTeam = teams[(1 + teams.indexOf(this.selectedTeam))%teams.length]
@@ -123,6 +132,12 @@ export default {
   },
   created() {
     moment.locale('es');
+    axios.get(
+      'https://users.dcc.uchile.cl/~sblasco/facalendar/')
+      .then((x) => {
+        store.settings = x.data;
+        this.changing = false;
+      });
     this.selected = moment();
   },
 };
@@ -137,25 +152,25 @@ $dot-size: 2px;
 $dot-space: 22px;
 
 :root, [theme="principal"] {
-  --primary-color: #78bbe8;
-  --light-primary-color-10: #85c1ea;
-  --light-primary-color-20: #93c8ec;
-  --light-primary-color-30: #a0cfee;
+  --primary-color: #68caed;
+  --light-primary-color-10: #81d3f0;
+  --light-primary-color-20: #9adcf3;
+  --light-primary-color-30: #b3e5f6;
   --light-primary-color-70: #d6eaf8;
-  --dark-primary-color-10: #59abe2;
-  --dark-primary-color-20: #3b9cdd;
-  --dark-primary-color-30: #238cd2;
+  --dark-primary-color-10: #4fc1ea;
+  --dark-primary-color-20: #35b9e7;
+  --dark-primary-color-30: #1cb0e4;
 }
 
 [theme="cuprum"] {
-  --primary-color: #fef79f;
-  --light-primary-color-10: #fef7a8;
-  --light-primary-color-20: #fef8b2;
-  --light-primary-color-30: #fef9bb;
+  --primary-color: #f9cb71;
+  --light-primary-color-10: #fad489;
+  --light-primary-color-20: #f7b941;
+  --light-primary-color-30: #fbdca0;
   --light-primary-color-70: #fefce2;
-  --dark-primary-color-10: #fdf376;
-  --dark-primary-color-20: #fdf04d;
-  --dark-primary-color-30: #fcec24;
+  --dark-primary-color-10: #f8c259;
+  --dark-primary-color-20: #f7b941;
+  --dark-primary-color-30: #f6b12a;
 }
 
 html {
