@@ -15,8 +15,8 @@
           </div>
           <div :class="$style.formInput" style="flex: auto 1; flex-wrap: wrap;">
             <span v-for="(day, i) in days" :key="day">
-              <input type="checkbox" :id="day" :value="i" v-model="c.periodicity_payload">
-              <label :for="day">{{day}}</label>
+              <input type="checkbox" :id="`${c.name}-${day}-${i}`" :value="i" v-model="c.periodicity_payload">
+              <label :for="`${c.name}-${day}-${i}`">{{day}}</label>
             </span>
           </div>
           <div :class="$style.formInput" style="flex: 1 0 40%; justify-content: center; flex-wrap: wrap;">
