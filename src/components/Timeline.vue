@@ -70,12 +70,12 @@ export default {
   flex: 1;
   font-size: 0.65em;
   flex-direction: column;
-  background: yellow;
+  background: var(--dark-primary-color-10);
   box-shadow: 0 0.7em 1em 1px black;
   transform-origin: bottom left;
   cursor: pointer;
   &:hover {
-    background: lightcyan;
+    background: var(--light-primary-color-70);
     transform: translate(0px, 0px) scale(1.05);
   }
 }
@@ -107,7 +107,7 @@ export default {
 }
 
 .today {
-  background: gold;
+  background: var(--light-primary-color-30);
   &::before {
     position: absolute;
     top: -1.5em;
@@ -130,23 +130,23 @@ export default {
 @keyframes cresent{
   0%{
     transform: translate(0px, 0px) scale(1);
-    background: lightblue;
+    background: var(--light-primary-color-70);
   }
   25%{
     transform: translate(0px, 0px) scale(1, 1.1);
-    background-color: lightcyan;
+    background-color: var(--light-primary-color-30);
   }
   50%{
     transform: translate(0px, 0px) scale(1);
-    background: lightblue;
+    background: var(--light-primary-color-70);
   }
   75%{
     transform: translate(0px, 0px) scale(1, 1.1);
-    background-color: lightcyan;
+    background-color: var(--light-primary-color-30);
   }
   100%{
     transform: translate(0px, 0px) scale(1);
-    background: lightblue;
+    background: var(--light-primary-color-70);
   }
 }
 

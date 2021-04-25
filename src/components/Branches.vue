@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     isQa(branch) {
-      return branch.includes('rc/');
+      return branch.includes('rc/') && !branch.includes('urc/') ;
     },
     createLink(repo, branch) {
       if (this.isQa(branch)) {
@@ -72,7 +72,6 @@ export default {
 </script>
 
 <style module lang="scss">
-@import "@/style.scss";
 
 .content {
   display: flex;
@@ -87,8 +86,8 @@ export default {
   margin: 0.2em 0;
   padding: 0 0.2em 0.3em;
   flex-direction: column;
-  border-left: 0.3em darken($primary-color, 40%) solid;
-  background-color: lighten($primary-color, 20%);
+  border-left: 0.3em var(--dark-primary-color-30) solid;
+  background-color: var(--light-primary-color-70);
   flex-basis: 48%;
   box-shadow: 0 0.1em 0.1em silver;
 }
@@ -113,7 +112,7 @@ export default {
   a:active { color:#0529c9; }
 }
 .dev {
-  border-left: 1em rgb(63, 160, 205) solid;
+  border-left: 1em var(--primary-color) solid;
 }
 @keyframes dots {
   0% {
@@ -127,13 +126,13 @@ export default {
   }
 }
 .qa {
-  border-left: 1em rgb(63, 185, 100) solid;
+  border-left: 1em var(--dark-primary-color-30) solid;
   ::after {
     content: "✨ Ad portas!! ✨";
     position: absolute;
     font-size: 0.7em;
     animation: dots 1s steps(5, end) infinite;
-    color: darken($primary-color, 75%);
+    color: var(--dark-primary-color-30);
     font-style: italic;
   }
 }

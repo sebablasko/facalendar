@@ -62,8 +62,6 @@ export default {
 </script>
 
 <style module lang="scss">
-@import '@/style.scss';
-
 .content {
   display: flex;
   flex-direction: row;
@@ -114,7 +112,7 @@ export default {
   display: flex;
   flex-direction: column;
   color: black;
-  background: lighten($primary-color, 25%);
+  background: var(--light-primary-color-30);
   text-align: center;
   position: absolute;
   font-style: italic;
@@ -133,7 +131,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   line-height: 1em;
-  background-color: darken($primary-color, 10%);
+  background-color: var(--dark-primary-color-20);
 }
 @keyframes blink{
   0%{

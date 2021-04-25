@@ -11,35 +11,39 @@
         ]"
         @click="select(index)">{{ w.name }}</span>
     </div>
-    <div v-if="selected !== undefined" :class="$style.modal">
-      <card>
-        <template v-slot:title>
-          {{ currentTitle }}
-        </template>
-        <template v-slot:body>
-          <div
-            :class="$style.exit"
-            @click="select(undefined)"
-            >
-            X
-          </div>
-          <component :is="currentComponent"></component>
-        </template>
-      </card>
-    </div>
+    <transition name="fade">
+      <div v-if="selected !== undefined" :class="$style.modal">
+        <div :class="[currentComponent.scrolleable && $style.modalScroll]">
+          <card>
+            <template v-slot:title>
+              {{ currentComponent.name }}
+            </template>
+            <template v-slot:body>
+              <div
+                :class="$style.exit"
+                @click="select(undefined)"
+                >
+                X
+              </div>
+              <component :is="currentComponent.component"></component>
+            </template>
+          </card>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import Card from '@/components/Card';
 import Picker from '@/components/Picker'
-import Covid from '@/components/Covid'
 import Branches from '@/components/Branches'
+import Settings from '@/components/Settings'
 
 const widgetsAvailable = [
-  { name: 'Chuasi', component: Picker, new: false },
-  // { name: 'Covid', component: Covid },
-  { name: 'Branches', component: Branches, new: true },
+  { name: 'Chuasi', component: Picker, new: false, scrolleable: false },
+  { name: 'Branches', component: Branches, new: false, scrolleable: true },
+  { name: 'Settings', component: Settings, new: true, scrolleable: true },
 ];
 
 export default {
@@ -60,14 +64,9 @@ export default {
     },
   },
   computed: {
-    currentTitle() {
-      if (this.selected !== undefined) {
-        return widgetsAvailable[this.selected].name;
-      }
-    },
     currentComponent() {
       if (this.selected !== undefined) {
-        return widgetsAvailable[this.selected].component;
+        return widgetsAvailable[this.selected];
       }
     },
   },
@@ -75,7 +74,6 @@ export default {
 </script>
 
 <style module lang="scss">
-@import '@/style.scss';
 
 .content {
   display: flex;
@@ -93,9 +91,10 @@ export default {
 .links {
   display: flex;
   flex-direction: row;
-  background: $primary-color;
+  background-color: var(--primary-color);
   box-shadow: 0 0.3px 0.0001em gray;
   padding-right: 4em;
+  transition: background-color 0.5s linear;
 }
 .link {
   cursor: pointer;
@@ -105,7 +104,7 @@ export default {
   font-size: 1.1em;
   position: relative;
   &:hover {
-    background-color: darken($primary-color, 10%);
+    background-color: var(--dark-primary-color-10);
   }
 }
 .new {
@@ -115,7 +114,7 @@ export default {
     font-size: 0.8em;
     bottom: 1.2em;
     right: 0.75em;
-    background-color: darken($primary-color, 30%);
+    background-color: var(--dark-primary-color-20);
     line-height: 1em;
   }
 }
@@ -132,11 +131,23 @@ export default {
   justify-content: center;
   align-items: center;
 }
+.modalScroll {
+  overflow-y: overlay;
+  max-height: 100%;
+}
 .exit {
   cursor: pointer;
   position: absolute;
   right: 1em;
   font-size: 3em;
   font-weight: bold;
+}
+</style>
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

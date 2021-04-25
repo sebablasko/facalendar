@@ -16,6 +16,7 @@
       </div>
     </transition>
     <memos v-show="false" :selected="selected" style="display: flex; flex: 2;"/>
+    <div style="padding-bottom: 7em;"></div>
     <div :class="$style.footer">
       <timeline
         :selected="selected"
@@ -50,7 +51,7 @@ export default {
   data() {
     return {
       selected: moment(),
-      selectedTeam: 'principal',
+      selectedTeam: settings.teams[0].id,
       changing: false,
     };
   },
@@ -79,10 +80,9 @@ export default {
     selectDate(date){
       this.selected = moment(date);
     },
-    teamToggle() {
-      this.changing = true;
+    startConfetti(teamId) {
       const particles = settings.teams
-        .find(x => x.id !== this.selectedTeam)
+        .find(x => x.id !== teamId)
         .ceremonies[0]
         .participants
         .map(x => ({
@@ -97,20 +97,27 @@ export default {
         defaultDropRate: 10,
         defaultColors: [
           '#78bbe8',
+          '#fef79f',
         ],
         particles: [
           { type: 'heart', size: 50 },
           ...particles,
         ],
       });
+    },
+    teamToggle() {
+      console.log('toggle');
+      this.changing = true;
+      const teams = settings.teams.map(x => x.id)
+      const newTeam = teams[(1 + teams.indexOf(this.selectedTeam))%teams.length]
+      this.startConfetti(newTeam);
+      document.documentElement.setAttribute('theme', newTeam);
+      this.selectedTeam = newTeam;
       setTimeout(() => {
         this.$confetti.stop();
       }, 2000);
       setTimeout(() => {
         this.changing = false;
-        this.selectedTeam = (this.selectedTeam === 'cuprum')
-          ? 'principal'
-          : 'cuprum';
       }, 500);
     }
   },
@@ -124,11 +131,32 @@ export default {
 <style module lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Chettan+2&display=swap');
-@import '@/style.scss';
 
 // Dimensions
 $dot-size: 2px;
 $dot-space: 22px;
+
+:root, [theme="principal"] {
+  --primary-color: #78bbe8;
+  --light-primary-color-10: #85c1ea;
+  --light-primary-color-20: #93c8ec;
+  --light-primary-color-30: #a0cfee;
+  --light-primary-color-70: #d6eaf8;
+  --dark-primary-color-10: #59abe2;
+  --dark-primary-color-20: #3b9cdd;
+  --dark-primary-color-30: #238cd2;
+}
+
+[theme="cuprum"] {
+  --primary-color: #fef79f;
+  --light-primary-color-10: #fef7a8;
+  --light-primary-color-20: #fef8b2;
+  --light-primary-color-30: #fef9bb;
+  --light-primary-color-70: #fefce2;
+  --dark-primary-color-10: #fdf376;
+  --dark-primary-color-20: #fdf04d;
+  --dark-primary-color-30: #fcec24;
+}
 
 html {
   height: 100%;
@@ -136,14 +164,12 @@ html {
 body {
   margin: 0;
   padding: 0;
-  // background: linear-gradient(to bottom right, #fffbcc, rgba(#fffbcc, 0.9));
-  // min-height: 100%;
-  // background-size: cover;
   background:
-		linear-gradient(90deg, $bg-color ($dot-space - $dot-size), transparent 1%) center,
-		linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
-		$dot-color;
+		linear-gradient(90deg, var(--light-primary-color-70) ($dot-space - $dot-size), transparent 1%) center,
+		linear-gradient(var(--light-primary-color-70) ($dot-space - $dot-size), transparent 1%) center,
+		silver;
 	background-size: $dot-space $dot-space;
+  transition: background-color 0.5s linear;
 }
 .app {
   // font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -160,8 +186,8 @@ body {
 }
 .row {
   display: flex;
-  flex: 1;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .footer {
   display: flex;

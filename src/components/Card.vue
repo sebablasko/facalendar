@@ -19,7 +19,6 @@ export default {
 </script>
 
 <style module lang="scss">
-@import '@/style.scss';
 
 .content {
   display: flex;
@@ -33,12 +32,13 @@ export default {
 }
 .title {
   display: flex;
-  background: $primary-color;
+  background-color: var(--primary-color);
   padding: 0 1em;
   box-shadow: 0 0.1em 0.1em silver;
   font-size: 1.2em;
   justify-content: center;
   font-weight: bold;
+  transition: background-color 0.5s linear;
 }
 .empty {
   display: flex;
@@ -46,7 +46,8 @@ export default {
 }
 .body {
   display: flex;
-  background: $primary-color;
+  background-color: var(--primary-color);
   box-shadow: 0 0.1em 0.1em silver;
+  transition: background-color 0.5s linear;
 }
 </style>

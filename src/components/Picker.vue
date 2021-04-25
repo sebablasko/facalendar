@@ -78,7 +78,6 @@ export default {
 </script>
 
 <style module lang="scss">
-@import '@/style.scss';
 
 .content {
   display: flex;
@@ -102,7 +101,7 @@ export default {
   border-radius: 7%;
   width: 7.5em;
   height: 7.5em;
-  border: 0.5em $primary-color solid;
+  border: 0.5em var(--primary-color) solid;
   opacity: 0.15;
   margin: 0.1em;
   cursor: pointer;
@@ -110,7 +109,7 @@ export default {
 }
 .selected {
   opacity: 1;
-  border: 0.5em lighten($primary-color, 10%) solid;
+  border: 0.5em var(--light-primary-color-30) solid;
 }
 .procesing {
   // animation: spin 14s;
@@ -131,21 +130,21 @@ export default {
 .winner {
   width: 7em;
   height: 7em;
-  border: 0.5em darken($primary-color, 30%) solid;
+  border: 0.5em var(--dark-primary-color-30) solid;
   animation: blink 1s infinite;
 }
 @keyframes blink{
   0%{
     transform: scale(1.1);
-    box-shadow: 0 0 10px lighten($primary-color, 30%), 0 0 80px 8px $primary-color;
+    box-shadow: 0 0 10px var(--light-primary-color-20), 0 0 80px 8px var(--primary-color);
   }
   50%{
     transform: scale(0.9);
-    box-shadow: 0 0 10px lighten($primary-color, 30%), 0 0 60px 2px $primary-color;
+    box-shadow: 0 0 10px var(--light-primary-color-10), 0 0 60px 2px var(--primary-color);
   }
   100%{
     transform: scale(1.1);
-    box-shadow: 0 0 10px lighten($primary-color, 30%), 0 0 70px 2px $primary-color;
+    box-shadow: 0 0 10px var(--light-primary-color-30), 0 0 70px 2px var(--primary-color);
   }
 }
 .controls {

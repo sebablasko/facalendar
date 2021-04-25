@@ -115,7 +115,6 @@ export default {
 </script>
 
 <style module lang="scss">
-@import '@/style.scss';
 
 .content {
   display: flex;
@@ -157,13 +156,13 @@ export default {
 }
 @keyframes shine{
   0%{
-    box-shadow: 0 0 30px 8px lighten($primary-color, 2%)
+    box-shadow: 0 0 30px 8px var(--light-primary-color-10);
   }
   50%{
-    box-shadow: 0 0 10px 2px lighten($primary-color, 30%)
+    box-shadow: 0 0 10px 2px var(--light-primary-color-30);
   }
   100%{
-    box-shadow: 0 0 30px 8px lighten($primary-color, 2%)
+    box-shadow: 0 0 30px 8px var(--light-primary-color-10);
   }
 }
 @keyframes twist{

@@ -1,12 +1,12 @@
 <template>
   <div :class="$style.content">
-    <embed :class="$style.frame" src="https://timetoherd.com/country/CHL"/>
+    settings
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Covid',
+  name: 'Settings',
 };
 </script>
 
@@ -16,8 +16,5 @@ export default {
   flex-direction: column;
   margin: 1em;
   flex: 1;
-}
-.frame {
-  min-height: 30em;
 }
 </style>

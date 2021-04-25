@@ -43,8 +43,8 @@ export default {
     toggle() {
       return {
         labels: { checked: 'Principal', unchecked: 'Cuprum' },
-        color: { checked: '#78bbe8', unchecked: '#efbb61'  },
-        switchColor: { checked: 'linear-gradient(to right, #78bbe8 20%, #ffffff)', unchecked: 'linear-gradient(to right, #ffffff 20%, #efbb61)' },
+        color: { checked: '#3b9cdd', unchecked: '#fdf04d'  },
+        switchColor: { checked: 'linear-gradient(to right, #3b9cdd 20%, #ffffff)', unchecked: 'linear-gradient(to right, #ffffff 20%, #fdf04d)' },
         fontSize: 22,
         width: 125,
         height: 30,
@@ -58,7 +58,6 @@ export default {
 </script>
 
 <style module lang="scss">
-@import '@/style.scss';
 
 .content {
   display: flex;
@@ -69,12 +68,13 @@ export default {
 
 .mainContent {
   box-shadow: 0 0.005em 0.05em silver;
-  background: $primary-color;
+  background: var(--primary-color);
   padding: 0.2em;
   text-align: center;
   font-size: 3em;
   font-weight: bold;
   text-shadow: 0 0 10px white;
+  transition: background-color 0.5s linear;
   &:first-letter {
     text-transform: uppercase;
   }
@@ -84,5 +84,8 @@ export default {
   float: right;
   font-family: 'Baloo Chettan 2', cursive;
   text-shadow: initial;
+  &:label {
+     color: red;
+  }
 }
 </style>
