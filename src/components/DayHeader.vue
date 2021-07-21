@@ -1,7 +1,6 @@
 <template>
   <div :class="$style.content">
-    <div :class="$style.mainContent">
-      {{ headerText }}
+    <div :class="$style.floating">
       <toggle-button
         :value="true"
         :labels="toggle.labels"
@@ -14,7 +13,9 @@
         @change="() => $emit('toggle')"
       />
     </div>
-    <widgets @refresh="$emit('refresh')"/>
+    <div :class="$style.mainContent">
+      {{ headerText }}
+    </div>
   </div>
 </template>
 
@@ -22,18 +23,19 @@
 import moment from 'moment';
 import { ToggleButton } from 'vue-js-toggle-button';
 
-import Widgets from '@/components/Widgets'
-
 export default {
   name: 'DayHeader',
   components: {
     ToggleButton,
-    Widgets,
   },
   props: {
     selected: {
       type: Object,
       default: () => moment(),
+    },
+    primaryTeam: {
+      type: String,
+      default: 'principal',
     },
   },
   computed: {
@@ -42,9 +44,18 @@ export default {
     },
     toggle() {
       return {
-        labels: { checked: 'Principal', unchecked: 'Cuprum' },
-        color: { checked: '#1cb0e4', unchecked: '#f6b12a'  },
-        switchColor: { checked: 'linear-gradient(to right, #1cb0e4 20%, #ffffff)', unchecked: 'linear-gradient(to right, #ffffff 20%, #f6b12a)' },
+        labels: {
+          checked: this.primaryTeam === 'principal' ? 'Principal' : 'Cuprum',
+          unchecked: this.primaryTeam !== 'principal' ? 'Cuprum' : 'Principal'
+        },
+        color: {
+          checked: this.primaryTeam === 'principal' ? '#1cb0e4' : '#f6b12a',
+          unchecked: this.primaryTeam !== 'principal' ? '#f6b12a' : '#1cb0e4',
+        },
+        switchColor: {
+          checked: this.primaryTeam === 'principal' ? 'linear-gradient(to right, #1cb0e4 20%, #ffffff)' : 'linear-gradient(to right, #ffffff 20%, #f6b12a)',
+          unchecked: this.primaryTeam !== 'principal' ? 'linear-gradient(to right, #ffffff 20%, #f6b12a)' : 'linear-gradient(to right, #1cb0e4 20%, #ffffff)',
+        },
         fontSize: 22,
         width: 125,
         height: 30,
@@ -61,31 +72,33 @@ export default {
 
 .content {
   display: flex;
+  flex: 1;
   flex-direction: column;
   font-family: 'Dancing Script', cursive;
   position: relative;
-}
-
-.mainContent {
-  box-shadow: 0 0.005em 0.05em silver;
-  background: var(--primary-color);
-  padding: 0.2em;
+  padding: 0.3em 0;
   text-align: center;
-  font-size: 3em;
+  font-size: 3.5em;
   font-weight: bold;
   text-shadow: 0 0 10px white;
   transition: background-color 0.5s linear;
+  background: linear-gradient(180deg ,var(--light-primary-color-10),var(--dark-primary-color-10));
+}
+
+.mainContent {
   &:first-letter {
     text-transform: uppercase;
   }
 }
 
+.floating {
+  position: absolute;
+  right: 50px;
+  top: 0.25em;
+}
+
 .floatingToggle {
-  float: right;
   font-family: 'Baloo Chettan 2', cursive;
   text-shadow: initial;
-  &:label {
-     color: red;
-  }
 }
 </style>

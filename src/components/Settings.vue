@@ -6,6 +6,7 @@
       :key="t.id"
       :class="$style.team">
       <span :class="$style.teamTitle">{{ t.name }}</span>
+      <CeremonySettings/>
       <div
         v-for="(c, ci) in t.ceremonies"
         :key="ci"
@@ -38,8 +39,6 @@
         :class="$style.addButton"
         @click="t.ceremonies.push({ name: '', participants: [], periodicity: 'DAYS_AT_WEEK', periodicity_payload: [] })">Agregar nueva ceremonia</button>
     </div>
-    <span :class="$style.separator"/>
-
     <span :class="$style.headerText">Ceremonias Comunes</span>
     <div :class="$style.team">
       <div
@@ -90,8 +89,13 @@ import settings from '@/utils/settings.js';
 import store from '@/store.js'
 import axios from 'axios';
 
+import CeremonySettings from '@/components/CeremonySettings';
+
 export default {
   name: 'Settings',
+  components: {
+    CeremonySettings,
+  },
   data() {
     return {
       teams: [],
@@ -193,7 +197,7 @@ export default {
   display: flex;
   flex: 1;
   flex-direction: row;
-  margin: 0.75em 0;
+  margin: 0.3em 0;
   align-items: center;
 }
 .formInput {
@@ -210,10 +214,6 @@ export default {
 }
 .addButton {
   margin-top: 0.75em;
-}
-.separator {
-  border-bottom: 2px var(--dark-primary-color-30) solid;
-  margin: 1em 0;
 }
 .actions {
   display: flex;

@@ -1,16 +1,21 @@
 <template>
   <div :class="$style.content">
-    <div :class="$style.empty"/>
-    <div :class="$style.links">
-      <span
-        v-for="(w, index) in widgetsAvailable"
-        :key="index"
-        :class="[
-          $style.link,
-          w.new && $style.new,
-        ]"
-        @click="select(index)">{{ w.name }}</span>
-    </div>
+    <card>
+      <template v-slot:title> Widgets </template>
+      <template v-slot:body>
+        <div :class="$style.links">
+          <span
+            v-for="(w, index) in widgetsAvailable"
+            :key="index"
+            :class="[
+              $style.link,
+              w.new && $style.new,
+              w.disabled && $style.disabled,
+            ]"
+            @click="!w.disabled && select(index)">{{ w.name }}</span>
+        </div>
+      </template>
+    </card>
     <transition name="fade">
       <div v-if="selected !== undefined" :class="$style.modal">
         <div :class="[
@@ -37,11 +42,13 @@ import Card from '@/components/Card';
 import Picker from '@/components/Picker'
 import Branches from '@/components/Branches'
 import Settings from '@/components/Settings'
+import Memoriam from '@/components/Memoriam'
 
 const widgetsAvailable = [
-  { name: 'Chuasi', component: Picker, new: false, scrolleable: false },
-  { name: 'Branches', component: Branches, new: false, scrolleable: true },
-  { name: 'Settings', component: Settings, new: true, scrolleable: true },
+  { name: 'Chuasi', component: Picker, new: false, scrolleable: false, disabled: false },
+  { name: 'Branches', component: Branches, new: false, scrolleable: true, disabled: false },
+  { name: 'Settings', component: Settings, new: false, scrolleable: true, disabled: false },
+  { name: 'In Memoriam', component: Memoriam, new: true, scrolleable: false, disabled: false },
 ];
 
 export default {
@@ -75,32 +82,28 @@ export default {
 
 .content {
   display: flex;
-  flex-direction: row;
-  flex: 1;
-  font-family: 'Baloo Chettan 2', cursive;
-  position: absolute;
-  bottom: -1.5em;
-  right: 0;
-}
-.empty {
-  display: flex;
-  flex: 1;
+  flex-direction: column;
 }
 .links {
   display: flex;
+  flex: 1;
   flex-direction: row;
+  flex-wrap: wrap;
+  transition: all 0.5s linear;
   background-color: var(--primary-color);
   box-shadow: 0 0.3px 0.0001em gray;
-  padding-right: 4em;
-  transition: background-color 0.5s linear;
 }
 .link {
   cursor: pointer;
   display: flex;
+  flex: 1;
   align-items: center;
-  padding: 0 1em;
+  justify-content: center;
+  margin: 7px;
+  padding: 0.3em;
   font-size: 1.1em;
   position: relative;
+  border: 2px solid var(--dark-primary-color-10);
   &:hover {
     background-color: var(--dark-primary-color-10);
   }
@@ -110,10 +113,27 @@ export default {
     content: 'new';
     position: absolute;
     font-size: 0.8em;
-    bottom: 1.2em;
-    right: 0.75em;
+    top: -0.3em;
+    right: 0.1em;
+    padding: 0 3px;
     background-color: var(--dark-primary-color-20);
     line-height: 1em;
+  }
+}
+.disabled {
+  cursor: not-allowed;
+  &::after {
+    content: 'ta roto :(';
+    position: absolute;
+    font-size: 0.8em;
+    top: 0.1em;
+    right: 0.1em;
+    padding: 0 3px;
+    background-color: var(--light-primary-color-20);
+    line-height: 1em;
+  }
+  &:hover {
+    background-color: var(--primary-color);
   }
 }
 .modal {
@@ -137,6 +157,7 @@ export default {
   display: flex;
   margin: 0 1em;
   flex: 1;
+  justify-content: center;
 }
 .exit {
   cursor: pointer;
@@ -149,7 +170,6 @@ export default {
 </style>
 <style>
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;

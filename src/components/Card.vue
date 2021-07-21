@@ -1,12 +1,12 @@
 <template>
   <div :class="$style.content">
     <div :class="$style.header">
-      <div :class="$style.title">
+      <div :class="[$style.title, star && $style.star]">
         <slot name="title"/>
       </div>
       <div :class="$style.empty"/>
     </div>
-    <div :class="$style.body">
+    <div :class="[$style.body, star && $style.star]">
       <slot name="body"/>
     </div>
   </div>
@@ -15,6 +15,12 @@
 <script>
 export default {
   name: 'Card',
+  props: {
+    star: {
+      type: Boolean,
+      default: false,
+    },
+  },
 };
 </script>
 
@@ -24,7 +30,6 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 1em;
-  flex: 1;
 }
 .header {
   display: flex;
@@ -52,5 +57,8 @@ export default {
   transition: background-color 0.5s linear;
   flex-direction: column;
   position: relative;
+}
+.star {
+  background-color: var(--dark-primary-color-30);
 }
 </style>

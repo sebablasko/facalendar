@@ -4,9 +4,7 @@ import maxImg from '@/assets/halty.jpeg';
 import ronnaImg from '@/assets/ronna.jpeg';
 import valeImg from '@/assets/vale.jpeg';
 import agueroImg from '@/assets/aguero.jpeg';
-import nicoImg from '@/assets/nico.jpeg';
 import sebaImg from '@/assets/seba.jpeg';
-import seba3Img from '@/assets/seba3.jpeg';
 import matiImg from '@/assets/mati.jpeg';
 import carlosImg from '@/assets/charlie.jpeg';
 import charlesImg from '@/assets/charles.jpeg';
@@ -22,12 +20,10 @@ export default {
     { id: 'charlie', name: 'Carlos', img: carlosImg, birthday: '02/09' },
     { id: 'awero', name: 'Andrés', img: agueroImg, birthday: '06/03' },
     { id: 'isa', name: 'Isa', img: isaImg, birthday: '05/04' },
-    { id: 'gallardo', name: 'Seba G', img: seba3Img, birthday: '09/08' },
-    { id: 'nico', name: 'Nico', img: nicoImg, birthday: '26/05' },
     { id: 'vale', name: 'Vale', img: valeImg, birthday: '01/05' },
     { id: 'ronna', name: 'Ronna', img: ronnaImg, birthday: '05/06' },
     { id: 'mati', name: 'Mati', img: matiImg, birthday: '16/10' },
-    { id: 'charles', name: 'Charles', img: charlesImg, birthday: '10/11' },
+    { id: 'charles', name: 'Charles', img: charlesImg, birthday: '30/08' },
     { id: 'mauro', name: 'Mauro', img: mauroImg, birthday: '10/11' },
     { id: 'jose', name: 'Jose', img: joseImg, birthday: '14/02' },
     { id: 'gerardo', name: 'Gerardo', img: gerardoImg, birthday: '11/10' },
@@ -57,9 +53,15 @@ export default {
       ceremonies: [
         {
           name: 'Daily',
-          participants: ['charlie', 'awero', 'isa', 'gallardo', 'vale'],
+          participants: ['charlie', 'awero', 'isa', 'vale'],
           periodicity: 'DAYS_AT_WEEK',
           periodicity_payload: [0, 1, 2, 3, 4],
+        },
+        {
+          name: 'Refinamiento',
+          participants: ['charlie', 'awero', 'isa', 'vale'],
+          periodicity: 'DAYS_AT_WEEK',
+          periodicity_payload: [2],
         },
       ],
     },
@@ -67,13 +69,13 @@ export default {
   globalCeremonies: [
     {
       name: 'Engineering Chapter',
-      participants: ['max', 'blasco', 'charlie', 'mati', 'gallardo', 'mauro', 'vale', 'mati'],
+      participants: ['max', 'blasco', 'charlie', 'mati', 'mauro', 'vale', 'mati'],
       periodicity: 'DAYS_AT_WEEK',
       periodicity_payload: [1],
     },
     {
       name: 'Continous Improvement',
-      participants: ['max', 'blasco', 'charlie', 'mati', 'gallardo', 'mauro', 'vale', 'mati'],
+      participants: ['max', 'blasco', 'charlie', 'mati', 'mauro', 'vale', 'mati'],
       periodicity: 'DAYS_AT_WEEK',
       periodicity_payload: [3],
     },

@@ -29,6 +29,12 @@ export default {
                   periodicity: 'DAYS_AT_WEEK',
                   periodicity_payload: [0, 1, 2, 3, 4],
                 },
+                {
+                  name: 'Refinamiento',
+                  participants: ['charlie', 'awero', 'isa', 'gallardo', 'vale'],
+                  periodicity: 'DAYS_AT_WEEK',
+                  periodicity_payload: [2],
+                },
               ],
             },
           ],

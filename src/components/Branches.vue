@@ -17,9 +17,7 @@
             !isQa(link) && $style.dev,
           ]"
         >
-          <a target="_blank" :href="createLink(branch.title, link)">{{
-            link
-          }}</a>
+          <a target="_blank" :href="createLink(branch.title, link)">{{ link }}</a>
         </div>
       </div>
       <div v-else :class="$style.beach">
@@ -139,7 +137,8 @@ export default {
 .beach {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
+  flex: 1;
   justify-content: center;
 }
 .beachText {

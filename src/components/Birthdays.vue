@@ -20,7 +20,11 @@
           </div>
           <div :class="$style.info">
             <div :class="$style.infoBig">{{ moment(mem.birthday, 'DD/MM').add(1, 'd').from(selected) }}</div>
-            <div :class="$style.infoSmall">{{ moment(mem.birthday, 'DD/MM').format('dddd D MMMM') }}</div>
+            <div :class="$style.infoSmall">
+              {{ moment(mem.birthday, 'DD/MM').format('dddd') }}
+              <br/>
+              {{ moment(mem.birthday, 'DD/MM').format('D MMM') }}
+            </div>
           </div>
         </div>
       </div>
@@ -32,6 +36,7 @@
 import moment from 'moment';
 import Card from '@/components/Card';
 import settings from '@/utils/settings.js';
+import seba3Img from '@/assets/seba3.jpeg';
 
 export default {
   name: 'Birthdays',
@@ -51,7 +56,10 @@ export default {
   },
   data() {
     return {
-      members: [...settings.members]
+      members: [
+        ...settings.members,
+        { id: 'gallardo', name: 'Seba G', img: seba3Img, birthday: '09/08' },
+      ]
         .sort((a,b) => moment(a.birthday, 'DD/MM').format('YYYYMMDD') - moment(b.birthday, 'DD/MM').format('YYYYMMDD')),
     };
   },
@@ -65,15 +73,14 @@ export default {
 .content {
   display: flex;
   flex-direction: row;
-  margin: 0.75em 0.5em 1em;
   justify-content: center;
   flex-wrap: wrap;
-  flex: 1;
+  margin: 0 0.3em 0.75em;
 }
 .item {
   display: flex;
   flex-direction: column;
-  margin: 0.7em 0;
+  margin: 0.75em 0.02em 0;
   align-items: center;
   position: relative;
   flex-basis: 12%;
@@ -81,10 +88,15 @@ export default {
 .photoDiv {
   margin: 0;
   padding: 0;
+  width: 3em;
+  height: 2.95em;
 }
 .past {
   opacity: 0.5;
   filter: grayscale(1);
+  & .infoBig {
+    display: none;
+  }
 }
 .birthday {
   position: relative;
@@ -104,25 +116,23 @@ export default {
 }
 .photo {
   border-radius: 10%;
-  width: 3.5em;
+  width: 3em;
   box-shadow: 0 0.1px 0.1em gray;
 }
 .info {
-  min-width: 65%;
   display: flex;
   flex-direction: column;
   color: black;
   background: var(--light-primary-color-30);
+  transition: background-color 0.5s linear;
   text-align: center;
-  position: absolute;
   font-style: italic;
   justify-content: center;
-  top: 3em;
   box-shadow: 0 0.2px 0.001em gray;
 }
 .infoBig {
-  font-size: 0.85em;
-  line-height: 1.2em;
+  font-size: 0.75em;
+  line-height: 1em;
 }
 .infoSmall {
   display: flex;
@@ -132,6 +142,8 @@ export default {
   justify-content: center;
   line-height: 1em;
   background-color: var(--dark-primary-color-20);
+  transition: background-color 0.5s linear;
+  padding: 2px 7px;
 }
 @keyframes blink{
   0%{

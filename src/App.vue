@@ -1,27 +1,38 @@
 <template>
   <div :class="$style.app">
-    <day-header :selected="selected" @toggle="teamToggle" @refresh="refresh"/>
-    <birthdays :selected="selected"/>
-    <transition name="fade">
-      <div v-show="!changing" :class="$style.row">
-        <ceremony
-          v-for="c in ceremonies"
-          :key="c.name"
-          :title="c.name"
+    <day-header
+      :primary-team="selectedTeam"
+      :selected="selected"
+      @toggle="teamToggle"
+      @refresh="refresh"/>
+    <month-line
+      :selected="selected"
+      :dates="month"
+      @select="selectDate"/>
+    <div :class="$style.general">
+      <div :class="$style.primary">
+        <transition name="fade">
+          <div v-show="!changing" :class="$style.row">
+            <ceremony
+              v-for="c in ceremonies"
+              :key="`${c.name}-${c.participants.join('-')}`"
+              :title="c.name"
+              :selected-date="selected"
+              :participants="c.participants"
+              :periodicity="c.periodicity"
+              :periodicity-payload="c.periodicity_payload"
+              />
+          </div>
+        </transition>
+        <monthly-calendar
           :selected-date="selected"
-          :participants="c.participants"
-          :periodicity="c.periodicity"
-          :periodicity-payload="c.periodicity_payload"
-          />
+          :dates="month"/>
       </div>
-    </transition>
-    <memos v-show="false" :selected="selected" style="display: flex; flex: 2;"/>
-    <div style="padding-bottom: 7em;"></div>
-    <div :class="$style.footer">
-      <timeline
-        :selected="selected"
-        :dates="month"
-        @select="selectDate"/>
+      <div :class="$style.secondary">
+        <widgets @refresh="refresh"/>
+        <birthdays :selected="selected"/>
+        <news/>
+      </div>
     </div>
   </div>
 </template>
@@ -31,11 +42,13 @@ import moment from 'moment';
 import axios from 'axios';
 
 import DayHeader from '@/components/DayHeader'
-import Timeline from '@/components/Timeline'
+import MonthLine from '@/components/MonthLine'
 import Birthdays from '@/components/Birthdays'
 import Ceremony from '@/components/Ceremony'
-import Memos from '@/components/Memos'
 import Picker from '@/components/Picker'
+import Widgets from '@/components/Widgets'
+import News from '@/components/News'
+import MonthlyCalendar from '@/components/MonthlyCalendar'
 
 import settings from '@/utils/settings.js';
 import store from '@/store.js'
@@ -44,11 +57,13 @@ export default {
   name: 'App',
   components: {
     DayHeader,
-    Timeline,
+    MonthLine,
     Birthdays,
     Ceremony,
-    Memos,
     Picker,
+    Widgets,
+    News,
+    MonthlyCalendar,
   },
   data() {
     return {
@@ -62,11 +77,12 @@ export default {
       cache: false,
       get: function() {
         const allCeremonies = [
-          //...settings.teams.find(x => x.id === this.selectedTeam).ceremonies,
-          //...settings.globalCeremonies,
+          // ...settings.teams.find(x => x.id === this.selectedTeam).ceremonies,
+          // ...settings.globalCeremonies,
           ...store.settings.teams.find(x => x.id === this.selectedTeam).ceremonies,
           ...store.settings.globalCeremonies,
-        ];
+        ]
+        .filter(x => x.periodicity === 'DAYS_AT_WEEK' && x.periodicity_payload.includes(this.selected.weekday()));
         return allCeremonies
           .map(x => ({
             ...x,
@@ -75,11 +91,49 @@ export default {
       },
     },
     month() {
-      const firstDay = moment().set('date', 1);
-      return [...Array(moment().daysInMonth())]
+      const monthEvents = [
+        { day: 5, week: 'SECOND', name: 'Retro' },
+        { day: 4, week: 'THIRD', name: '1 a 1' },
+        { day: 4, week: 'LAST', name: 'Expectativa vs Realidad' },
+      ];
+      const validateOccurrency = (event, checkingDate) => {
+        let firstWeek = moment(checkingDate).set('date', 1);
+        while (firstWeek.day() != event.day) {
+          firstWeek.add(1, 'd');
+        }
+        firstWeek = firstWeek.week();
+        let lastWeek = moment(checkingDate).add(1, 'months').set('date', 1).add(-1, 'd');
+        while (lastWeek.day() != event.day) {
+          lastWeek.add(-1, 'd');
+        }
+        lastWeek = lastWeek.week();
+
+        const currentWeek = moment(checkingDate).week();
+        switch (event.week) {
+          case 'FIRST':
+            return firstWeek === currentWeek && moment(checkingDate).day() === event.day;
+          case 'SECOND':
+            return firstWeek + 1 === currentWeek && moment(checkingDate).day() === event.day;
+          case 'THIRD':
+            return firstWeek + 2 === currentWeek && moment(checkingDate).day() === event.day;
+          case 'PRELAST':
+            return lastWeek - 1 === currentWeek && moment(checkingDate).day() === event.day;
+          case 'LAST':
+            return lastWeek === currentWeek && moment(checkingDate).day() === event.day;
+        }
+        return false;
+      };
+      const firstDay = moment(this.selected).set('date', 1);
+      return [...Array(moment(this.selected).daysInMonth())]
         .map((x, i) => ({
           date: moment(firstDay).add(i, 'd'),
-          items: [],
+          items: [
+            ...(
+                monthEvents.some(x => validateOccurrency(x, moment(firstDay).add(i, 'd')))
+                ? [monthEvents.find(x => validateOccurrency(x, moment(firstDay).add(i, 'd')))]
+                : []
+                ),
+          ],
         }));
     },
   },
@@ -130,6 +184,11 @@ export default {
       }, 500);
     }
   },
+  mounted() {
+    if (window.location.search.substring(1) === 'cuprum') {
+      this.teamToggle();
+    }
+   },
   created() {
     moment.locale('es');
     axios.get(
@@ -137,8 +196,10 @@ export default {
       .then((x) => {
         store.settings = x.data;
         this.changing = false;
+        this.refresh();
       });
-    this.selected = moment();
+    this.changing = false;
+    this.selected = moment().add(0, 'months');
   },
 };
 </script>
@@ -177,7 +238,7 @@ html {
   height: 100%;
 }
 body {
-  margin: 0;
+  margin: auto;
   padding: 0;
   background:
 		linear-gradient(90deg, var(--light-primary-color-70) ($dot-space - $dot-size), transparent 1%) center,
@@ -187,7 +248,6 @@ body {
   transition: background-color 0.5s linear;
 }
 .app {
-  // font-family: Avenir, Helvetica, Arial, sans-serif;
   font-family: 'Baloo Chettan 2', cursive;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -203,13 +263,26 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
+  & > * {
+    flex-basis: 45%;
+  }
 }
-.footer {
+
+.general {
   display: flex;
-  width: 100%;
+  flex-direction: row;
   flex: 1;
-  position: fixed;
-  bottom: 0;
+}
+.primary {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+}
+.secondary {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 </style>
 <style>
