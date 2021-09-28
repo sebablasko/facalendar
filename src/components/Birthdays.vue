@@ -1,7 +1,7 @@
 <template>
   <card>
     <template v-slot:title>
-      Cumpleaños 🎉
+      Cumpleaños <cake-variant-outline-icon/>
     </template>
     <template v-slot:body>
       <div :class="$style.content">
@@ -19,7 +19,13 @@
             <img :class="$style.photo" :src="mem.img"/>
           </div>
           <div :class="$style.info">
-            <div :class="$style.infoBig">{{ moment(mem.birthday, 'DD/MM').add(1, 'd').from(selected) }}</div>
+            <div :class="$style.infoBig">
+              {{
+                moment(mem.birthday, 'DD/MM').isSame(selected, 'day')
+                ? '¡Es Hoy! :D'
+                : moment(mem.birthday, 'DD/MM').add(1, 'd').from(selected)
+              }}
+            </div>
             <div :class="$style.infoSmall">
               {{ moment(mem.birthday, 'DD/MM').format('dddd') }}
               <br/>
@@ -34,14 +40,16 @@
 
 <script>
 import moment from 'moment';
+import CakeVariantOutlineIcon from 'vue-material-design-icons/CakeVariantOutline.vue';
+
 import Card from '@/components/Card';
 import settings from '@/utils/settings.js';
-import seba3Img from '@/assets/seba3.jpeg';
 
 export default {
   name: 'Birthdays',
   components: {
     Card,
+    CakeVariantOutlineIcon,
   },
   props: {
     selected: {
@@ -58,7 +66,6 @@ export default {
     return {
       members: [
         ...settings.members,
-        { id: 'gallardo', name: 'Seba G', img: seba3Img, birthday: '09/08' },
       ]
         .sort((a,b) => moment(a.birthday, 'DD/MM').format('YYYYMMDD') - moment(b.birthday, 'DD/MM').format('YYYYMMDD')),
     };
@@ -80,7 +87,7 @@ export default {
 .item {
   display: flex;
   flex-direction: column;
-  margin: 0.75em 0.02em 0;
+  margin: 0.75em 0.25em 0;
   align-items: center;
   position: relative;
   flex-basis: 12%;

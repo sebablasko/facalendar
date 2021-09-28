@@ -6,17 +6,6 @@
     <template v-slot:body>
       <div :class="$style.content">
         <div
-          :class="$style.groups">
-          <div
-            v-for="(mem, index) in participants"
-            :key="index"
-            :class="[
-              $style.groupsItem,
-              next.name === mem.name && $style.next]">
-            <img :class="$style.groupsItemPhoto" :src="mem.img"/>
-          </div>
-        </div>
-        <div
           v-if="isWorkingDay"
           :class="$style.winnerOfToday">
           <img :class="[$style.photo, $style.winnerAnimation]" :src="winner.img"/>
@@ -27,6 +16,17 @@
           :class="$style.winnerOfToday">
           <img :class="$style.beachPhoto" :src="beach"/>
           <div :class="$style.winnerTitle">Not today</div>
+        </div>
+        <div
+          :class="$style.groups">
+          <div
+            v-for="(mem, index) in participants"
+            :key="index"
+            :class="[
+              $style.groupsItem,
+              next.name === mem.name && $style.next]">
+            <img :class="$style.groupsItemPhoto" :src="mem.img"/>
+          </div>
         </div>
       </div>
     </template>
@@ -118,17 +118,15 @@ export default {
 
 .content {
   display: flex;
-  flex-direction: row;
-  // flex: 1;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
 }
 .winnerTitle {
   font-family: 'Dancing Script', cursive;
   font-weight: bold;
   font-size: 1.6em;
   display: flex;
-  // justify-content: center;
-  // flex-direction: row;
-  // margin: 1em 0;
 }
 .shimmer {
   text-align: center;
@@ -239,8 +237,7 @@ export default {
 }
 .groups {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  flex-direction: row;
 }
 .groupsItem {
   display: flex;
@@ -252,11 +249,12 @@ export default {
 .next {
   animation: blinkNext 1s infinite;
   &::before {
-    font-size: 0.45em;
+    font-size: 0.6em;
+    color: --light-primary-color-70;
     position: absolute;
     font-weight: bold;
-    top: 3.2em;
-    left: 1em;
+    top: 2.2em;
+    left: 0.6em;
     content:"next";
   }
 }

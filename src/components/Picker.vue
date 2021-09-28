@@ -31,12 +31,6 @@ import settings from '@/utils/settings.js';
 
 export default {
   name: 'Picker',
-  props: {
-    selected: {
-      type: Object,
-      default: () => moment(),
-    },
-  },
   data() {
     return {
       members: settings.members,
@@ -70,9 +64,6 @@ export default {
         );
       }
     },
-  },
-  created() {
-    moment.locale('es');
   },
 };
 </script>

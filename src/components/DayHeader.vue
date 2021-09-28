@@ -1,6 +1,7 @@
 <template>
   <div :class="$style.content">
     <div :class="$style.floating">
+      <refresh-circle-icon/>
       <toggle-button
         :value="true"
         :labels="toggle.labels"
@@ -21,12 +22,15 @@
 
 <script>
 import moment from 'moment';
+import RefreshCircleIcon from 'vue-material-design-icons/RefreshCircle.vue';
+
 import { ToggleButton } from 'vue-js-toggle-button';
 
 export default {
   name: 'DayHeader',
   components: {
     ToggleButton,
+    RefreshCircleIcon,
   },
   props: {
     selected: {
@@ -94,7 +98,9 @@ export default {
 .floating {
   position: absolute;
   right: 50px;
-  top: 0.25em;
+  top: -0.25em;
+  display: flex;
+  flex-direction: column;
 }
 
 .floatingToggle {

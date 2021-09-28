@@ -1,5 +1,6 @@
 <template>
   <div :class="$style.app">
+    <!-- <CalendarIcon/> -->
     <day-header
       :primary-team="selectedTeam"
       :selected="selected"
@@ -30,6 +31,7 @@
       </div>
       <div :class="$style.secondary">
         <widgets @refresh="refresh"/>
+        <releases/>
         <birthdays :selected="selected"/>
         <news/>
       </div>
@@ -41,6 +43,8 @@
 import moment from 'moment';
 import axios from 'axios';
 
+import CalendarIcon from 'vue-material-design-icons/Calendar.vue';
+
 import DayHeader from '@/components/DayHeader'
 import MonthLine from '@/components/MonthLine'
 import Birthdays from '@/components/Birthdays'
@@ -48,6 +52,7 @@ import Ceremony from '@/components/Ceremony'
 import Picker from '@/components/Picker'
 import Widgets from '@/components/Widgets'
 import News from '@/components/News'
+import Releases from '@/components/Releases'
 import MonthlyCalendar from '@/components/MonthlyCalendar'
 
 import settings from '@/utils/settings.js';
@@ -56,6 +61,7 @@ import store from '@/store.js'
 export default {
   name: 'App',
   components: {
+    CalendarIcon,
     DayHeader,
     MonthLine,
     Birthdays,
@@ -63,6 +69,7 @@ export default {
     Picker,
     Widgets,
     News,
+    Releases,
     MonthlyCalendar,
   },
   data() {
@@ -92,7 +99,7 @@ export default {
     },
     month() {
       const monthEvents = [
-        { day: 5, week: 'SECOND', name: 'Retro' },
+        // { day: 5, week: 'SECOND', name: 'Retro' },
         { day: 4, week: 'THIRD', name: '1 a 1' },
         { day: 4, week: 'LAST', name: 'Expectativa vs Realidad' },
       ];
@@ -246,6 +253,7 @@ body {
 		silver;
 	background-size: $dot-space $dot-space;
   transition: background-color 0.5s linear;
+  max-width: 1300px;
 }
 .app {
   font-family: 'Baloo Chettan 2', cursive;
@@ -265,7 +273,8 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   & > * {
-    flex-basis: 45%;
+    flex-basis: 48%;
+    margin: 0 0.5em;
   }
 }
 
@@ -278,11 +287,19 @@ body {
   display: flex;
   flex-direction: column;
   flex: 2;
+  margin-right: 0.5em;
+  & > * {
+    margin: 1em 0;
+  }
 }
 .secondary {
   display: flex;
   flex-direction: column;
   flex: 1;
+  margin-left: 0.5em;
+  & > * {
+    margin: 1em 0;
+  }
 }
 </style>
 <style>

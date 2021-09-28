@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.content">
     <card>
-      <template v-slot:title> Widgets </template>
+      <template v-slot:title>Widgets <widgets-icon/></template>
       <template v-slot:body>
         <div :class="$style.links">
           <span
@@ -38,15 +38,17 @@
 </template>
 
 <script>
+import WidgetsIcon from 'vue-material-design-icons/WidgetsOutline.vue';
+
 import Card from '@/components/Card';
 import Picker from '@/components/Picker'
-import Branches from '@/components/Branches'
+import Screams from '@/components/Screams'
 import Settings from '@/components/Settings'
 import Memoriam from '@/components/Memoriam'
 
 const widgetsAvailable = [
   { name: 'Chuasi', component: Picker, new: false, scrolleable: false, disabled: false },
-  { name: 'Branches', component: Branches, new: false, scrolleable: true, disabled: false },
+  { name: 'Gritos', component: Screams, new: false, scrolleable: true, disabled: false },
   { name: 'Settings', component: Settings, new: false, scrolleable: true, disabled: false },
   { name: 'In Memoriam', component: Memoriam, new: true, scrolleable: false, disabled: false },
 ];
@@ -56,6 +58,7 @@ export default {
   components: {
     Card,
     Picker,
+    WidgetsIcon,
   },
   data() {
     return {

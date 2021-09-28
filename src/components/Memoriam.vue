@@ -31,6 +31,7 @@ import seba3Img from '@/assets/seba3.jpeg';
 import armandoImg from '@/assets/armando.jpeg';
 import practicarlosImg from '@/assets/practicarlos.jpeg';
 import nicoImg from '@/assets/nico.jpeg';
+import agueroImg from '@/assets/aguero.jpeg';
 import forest from '@/assets/forest4.mp3';
 
 export default {
@@ -54,6 +55,7 @@ export default {
         { id: 'practicarlos', name: 'Carlos el practicante', img: practicarlosImg },
         { id: 'nico', name: 'Nico', img: nicoImg, birthday: '26/05' },
         { id: 'gallardo', name: 'Seba G', img: seba3Img, birthday: '09/08' },
+        { id: 'awero', name: 'Andrés', img: agueroImg, birthday: '06/03' },
       ],
     };
   },
@@ -108,7 +110,7 @@ export default {
   100% { opacity: 1; }
 }
 $animationDelay: 1;
-@for $i from 1 through 10 {
+@for $i from 1 through 11 {
 	.item:nth-of-type(#{$i}) {
 		animation-delay: #{1+($i)}s;
   }

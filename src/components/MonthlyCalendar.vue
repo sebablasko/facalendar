@@ -1,7 +1,7 @@
 <template>
   <card>
     <template v-slot:title>
-      Hitos Mensuales
+      Hitos Mensuales <calendar-icon/>
     </template>
     <template v-slot:body>
       <div :class="$style.content">
@@ -29,7 +29,7 @@
             $style.day,
             feriados.some(f => d.date.isSame(f.fecha, 'day')) && $style.feriado,
             d.date.isBefore(today, 'date') && $style.cross,
-            d.date.isSame(today, 'date') && $style.circle,
+            d.date.isSame(selectedDate, 'date') && $style.circle,
             [0, 6].includes(d.date.day()) && $style.weekend,
           ]">
           <div :class="$style.dayNumber">{{ d.date.format('D') }}</div>
@@ -57,6 +57,8 @@
 
 <script>
 import moment from 'moment';
+import CalendarIcon from 'vue-material-design-icons/CalendarMonth.vue';
+
 import Card from '@/components/Card';
 import feriados from '@/utils/feriados.js';
 
@@ -64,6 +66,7 @@ export default {
   name: 'MonthlyCalendar',
   components: {
     Card,
+    CalendarIcon
   },
   props: {
     selectedDate: {
@@ -83,7 +86,10 @@ export default {
       return moment();
     },
     preOffset() {
-      const daysToAdd = this.dates[0].date.day() - 1;
+      let daysToAdd = this.dates[0].date.day() - 1;
+      if (daysToAdd < 0) {
+        daysToAdd = 6;
+      }
       return [...Array(daysToAdd)].map((x, i) => moment(this.dates[0].date).add(-i, 'days'));
     },
     postOffset() {
@@ -112,17 +118,17 @@ export default {
   flex-wrap: wrap;
   flex: 1;
   position: relative;
-  &::after {
-    position: absolute;
-    content: 'Coming soon';
-    font-size: 5em;
-    transform: rotate(-25deg);
-    top: 1.5em;
-    opacity: 0.75;
-    font-weight: bold;
-    filter: unset;
-    animation: jump 2s ease-in-out infinite;
-  }
+  // &::after {
+  //   position: absolute;
+  //   content: 'Coming soon';
+  //   font-size: 5em;
+  //   transform: rotate(-25deg);
+  //   top: 1.5em;
+  //   opacity: 0.75;
+  //   font-weight: bold;
+  //   filter: unset;
+  //   animation: jump 2s ease-in-out infinite;
+  // }
 }
 .dayName {
   display: flex;
@@ -146,7 +152,7 @@ export default {
   transition: background-color 0.5s linear;
   height: 4.5em;
   position: relative;
-  filter: blur(3px);
+  // filter: blur(3px);
 }
 .dayNumber {
   display: flex;
@@ -168,6 +174,25 @@ export default {
   transform: rotate(.5deg) skewx(-8deg);
   box-shadow: 0 2px 1px 1px var(--dark-primary-color-20);
 }
+.circle {
+  transform: scale(1.3) translateY(5%);
+  box-shadow: 0 0 0.5em 0.1em gray;
+  z-index: 1;
+  &::after {
+    position: absolute;
+    // content: '0';
+    font-size: 11.3em;
+    font-family: 'Caveat', cursive;
+    top: -135%;
+    left: 10%;
+    opacity: 0.65;
+    font-weight: bold;
+    filter: unset;
+    transform: rotate(45deg);
+    font-weight: 100;
+    color: var(--dark-primary-color-30);
+  }
+}
 .cross {
   &::after {
     position: absolute;
@@ -176,7 +201,7 @@ export default {
     font-family: 'Caveat', cursive;
     top: -100%;
     left: 20%;
-    opacity: 0.75;
+    opacity: 0.65;
     font-weight: bold;
     filter: unset;
     transform: rotate(-5deg);

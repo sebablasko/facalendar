@@ -29,7 +29,7 @@ export default {
 .content {
   display: flex;
   flex-direction: column;
-  margin: 1em;
+  // margin: 1em;
 }
 .header {
   display: flex;
@@ -44,6 +44,11 @@ export default {
   justify-content: center;
   font-weight: bold;
   transition: background-color 0.5s linear;
+  align-items: center;
+  & > * :first-child {
+    padding-top: 3px;
+    padding-left: 6px;
+  }
 }
 .empty {
   display: flex;

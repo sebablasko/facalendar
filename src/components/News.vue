@@ -1,7 +1,7 @@
 <template>
   <card>
     <template v-slot:title>
-      Algunas nius de hoy
+      Algunas nius de hoy <newspaper-icon/>
     </template>
     <template v-slot:body>
       <div :class="$style.content">
@@ -20,12 +20,15 @@
 
 <script>
 import axios from 'axios';
+import NewspaperIcon from 'vue-material-design-icons/Newspaper.vue';
+
 import Card from '@/components/Card';
 
 export default {
   name: 'News',
   components: {
     Card,
+    NewspaperIcon,
   },
   methods: {
     randomStyle() {

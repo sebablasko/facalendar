@@ -14,13 +14,13 @@
           <div :class="$style.formInput">
             <input v-model="c.name"/>
           </div>
-          <div :class="$style.formInput" style="flex: auto 1; flex-wrap: wrap;">
+          <div :class="$style.formInput">
             <span v-for="(day, i) in days" :key="day">
               <input type="checkbox" :id="`${c.name}-${day}-${i}`" :value="i" v-model="c.periodicity_payload">
               <label :for="`${c.name}-${day}-${i}`">{{day}}</label>
             </span>
           </div>
-          <div :class="$style.formInput" style="flex: 1 0 40%; justify-content: center; flex-wrap: wrap;">
+          <div :class="$style.formInput" style="justify-content: center; flex-wrap: wrap;">
             <img
               v-for="m in members"
               :key="m.id"
@@ -48,13 +48,13 @@
           <div :class="$style.formInput">
             <input v-model="c.name"/>
           </div>
-          <div :class="$style.formInput" style="flex: auto 1; flex-wrap: wrap;">
+          <div :class="$style.formInput">
             <span v-for="(day, i) in days" :key="day">
               <input type="checkbox" :id="day" :value="i" v-model="c.periodicity_payload">
               <label :for="day">{{day}}</label>
             </span>
           </div>
-          <div :class="$style.formInput" style="flex: 1 0 40%; justify-content: center; flex-wrap: wrap;">
+          <div :class="$style.formInput" style="justify-content: center; flex-wrap: wrap;">
             <img
               v-for="m in members"
               :key="m.id"
@@ -105,7 +105,7 @@ export default {
   },
   computed: {
     days() {
-      return moment.weekdays(true).splice(0, 5);
+      return moment.weekdays(true).splice(0, 5).map(x => x.substring(0, 3));
     },
     members() {
       return settings.members;
@@ -197,7 +197,7 @@ export default {
   display: flex;
   flex: 1;
   flex-direction: row;
-  margin: 0.3em 0;
+  margin: 0.5em 0;
   align-items: center;
 }
 .formInput {
@@ -211,6 +211,7 @@ export default {
 }
 .memberImgInactive {
   opacity: 0.15;
+  filter: grayscale(1);
 }
 .addButton {
   margin-top: 0.75em;
