@@ -64,6 +64,6 @@ export default {
   position: relative;
 }
 .star {
-  background-color: var(--dark-primary-color-30);
+  background-color: var(--dark-primary-color-10);
 }
 </style>

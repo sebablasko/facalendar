@@ -93,7 +93,10 @@ export default {
       return [...Array(daysToAdd)].map((x, i) => moment(this.dates[0].date).add(-i, 'days'));
     },
     postOffset() {
-      const daysToAdd = 7 - this.dates[this.dates.length - 1].date.day();
+      let daysToAdd = 7 - this.dates[this.dates.length - 1].date.day();
+      if (daysToAdd === 7) {
+        daysToAdd = 0;
+      }
       return [...Array(daysToAdd)].map((x, i) => moment(this.dates[0].date).add(1, 'months').add(i, 'days'));
     },
   },
@@ -118,17 +121,6 @@ export default {
   flex-wrap: wrap;
   flex: 1;
   position: relative;
-  // &::after {
-  //   position: absolute;
-  //   content: 'Coming soon';
-  //   font-size: 5em;
-  //   transform: rotate(-25deg);
-  //   top: 1.5em;
-  //   opacity: 0.75;
-  //   font-weight: bold;
-  //   filter: unset;
-  //   animation: jump 2s ease-in-out infinite;
-  // }
 }
 .dayName {
   display: flex;
@@ -137,8 +129,9 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 13%;
-  border: 1px dashed var(--dark-primary-color-20);
-  background: var(--light-primary-color-10);
+  border-left: 1px solid var(--dark-primary-color-20);
+  border-right: 1px solid var(--dark-primary-color-20);
+  background: var(--primary-color);
   transition: background-color 0.5s linear;
 }
 .day {
@@ -147,12 +140,11 @@ export default {
   flex-direction: column;
   padding: 0;
   width: 13%;
-  border: 1px dashed var(--dark-primary-color-20);
-  background: var(--light-primary-color-30);
+  border: 1px solid var(--dark-primary-color-20);
+  background: var(--light-primary-color-70);
   transition: background-color 0.5s linear;
   height: 4.5em;
   position: relative;
-  // filter: blur(3px);
 }
 .dayNumber {
   display: flex;
@@ -170,7 +162,7 @@ export default {
   font-size: 0.85em;
   margin: 0 10px;
   text-align: center;
-  background: var(--light-primary-color-70);
+  background: var(--light-primary-color-30);
   transform: rotate(.5deg) skewx(-8deg);
   box-shadow: 0 2px 1px 1px var(--dark-primary-color-20);
 }
@@ -180,7 +172,6 @@ export default {
   z-index: 1;
   &::after {
     position: absolute;
-    // content: '0';
     font-size: 11.3em;
     font-family: 'Caveat', cursive;
     top: -135%;

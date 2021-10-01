@@ -1,70 +1,43 @@
 <template>
   <div :class="$style.content">
-    <div :class="$style.floating">
-      <refresh-circle-icon/>
-      <toggle-button
-        :value="true"
-        :labels="toggle.labels"
-        :color="toggle.color"
-        :switch-color="toggle.switchColor"
-        :font-size="toggle.fontSize"
-        :width="toggle.width"
-        :height="toggle.height"
-        :class="$style.floatingToggle"
-        @change="() => $emit('toggle')"
-      />
-    </div>
     <div :class="$style.mainContent">
       {{ headerText }}
+    </div>
+    <div :class="$style.floating">
+      <swap-horizontal-icon
+        :class="$style.item"
+        :size="26"
+        @click="setCurrentTeam(undefined)"/>
+      <cog-icon
+        v-if="false"
+        :class="$style.item"
+        :size="26"
+        @click="setCurrentTeam(undefined)"/>
     </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
-import RefreshCircleIcon from 'vue-material-design-icons/RefreshCircle.vue';
+import { mapState, mapMutations } from 'vuex';
 
-import { ToggleButton } from 'vue-js-toggle-button';
+import SwapHorizontalIcon from 'vue-material-design-icons/SwapHorizontal.vue';
+import CogIcon from 'vue-material-design-icons/Cog.vue';
 
 export default {
   name: 'DayHeader',
   components: {
-    ToggleButton,
-    RefreshCircleIcon,
-  },
-  props: {
-    selected: {
-      type: Object,
-      default: () => moment(),
-    },
-    primaryTeam: {
-      type: String,
-      default: 'principal',
-    },
+    SwapHorizontalIcon,
+    CogIcon,
   },
   computed: {
+    ...mapState(['selectedDate', 'selectedTeam']),
     headerText() {
-      return `${this.selected.format('dddd')} ${this.selected.format('D')} de ${this.selected.format('MMMM')} del ${this.selected.format('YYYY')}`;
+      return `${this.selectedDate.format('dddd')} ${this.selectedDate.format('D')} de ${this.selectedDate.format('MMMM')} del ${this.selectedDate.format('YYYY')}`;
     },
-    toggle() {
-      return {
-        labels: {
-          checked: this.primaryTeam === 'principal' ? 'Principal' : 'Cuprum',
-          unchecked: this.primaryTeam !== 'principal' ? 'Cuprum' : 'Principal'
-        },
-        color: {
-          checked: this.primaryTeam === 'principal' ? '#1cb0e4' : '#f6b12a',
-          unchecked: this.primaryTeam !== 'principal' ? '#f6b12a' : '#1cb0e4',
-        },
-        switchColor: {
-          checked: this.primaryTeam === 'principal' ? 'linear-gradient(to right, #1cb0e4 20%, #ffffff)' : 'linear-gradient(to right, #ffffff 20%, #f6b12a)',
-          unchecked: this.primaryTeam !== 'principal' ? 'linear-gradient(to right, #ffffff 20%, #f6b12a)' : 'linear-gradient(to right, #1cb0e4 20%, #ffffff)',
-        },
-        fontSize: 22,
-        width: 125,
-        height: 30,
-      };
-    },
+  },
+  methods: {
+    ...mapMutations(['setCurrentTeam']),
   },
   created() {
     moment.locale('es');
@@ -76,10 +49,12 @@ export default {
 
 .content {
   display: flex;
-  flex: 1;
-  flex-direction: column;
-  font-family: 'Dancing Script', cursive;
   position: relative;
+  flex: 1;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Dancing Script', cursive;
   padding: 0.3em 0;
   text-align: center;
   font-size: 3.5em;
@@ -90,6 +65,7 @@ export default {
 }
 
 .mainContent {
+  flex: 1;
   &:first-letter {
     text-transform: uppercase;
   }
@@ -97,14 +73,18 @@ export default {
 
 .floating {
   position: absolute;
-  right: 50px;
-  top: -0.25em;
+  right: 0;
   display: flex;
+  padding: 0 1em;
   flex-direction: column;
 }
-
-.floatingToggle {
-  font-family: 'Baloo Chettan 2', cursive;
-  text-shadow: initial;
+.item {
+  display: flex;
+  padding: 0.1em 0;
+  cursor: pointer;
+  opacity: 0.75;
+  &:hover {
+    opacity: 1;
+  }
 }
 </style>

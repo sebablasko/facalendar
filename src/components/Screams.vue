@@ -6,21 +6,20 @@
         :key="index"
         :class="[
           $style.scream,
-          selected.includes(mem) && $style.selected,
-          selected.includes(mem) && processing && $style.procesing,
+          processing && $style.procesing,
           winner === mem && $style.winner,
-        ]"
-        @click="toggle(mem)">
+        ]">
         {{ mem }}
       </div>
     </div>
     <div :class="$style.controls">
       <button
-        :disabled="processing || selected.length === 0"
+        :disabled="processing"
         @click="shuffle()">
-        Go!
+        Dame uno al azar!
       </button>
       <button
+        v-if="false"
         :disabled="showExtras"
         @click="showExtras = true">
         Editar
@@ -42,26 +41,25 @@
 </template>
 
 <script>
-import moment from 'moment';
-import settings from '@/utils/settings.js';
+import { mapState } from 'vuex';
 
 export default {
-  name: 'Picker',
+  name: 'Screams',
   data() {
     return {
       showExtras: undefined,
       newVal: undefined,
-      screams: [
-        'ula ula, ula ula',
-        'el farol',
-      ],
-      selected: [],
       winner: undefined,
       processing: false,
     };
   },
+  computed: {
+    ...mapState(['remote', 'selectedTeam']),
+    screams() {
+      return this.remote.teams.find(x => x.id === this.selectedTeam).screams;
+    },
+  },
   methods: {
-    moment,
     add() {
       this.screams.push(this.newVal);
       this.newVal = undefined;
@@ -69,28 +67,18 @@ export default {
     remove(index) {
       this.screams.splice(index, 1);
     },
-    toggle(name) {
-      this.winner = undefined;
-      if (this.selected.includes(name)) {
-        this.selected = this.selected.filter(x => x !== name);
-      } else {
-        this.selected = [...this.selected, name];
-      }
-    },
     shuffle() {
       this.loading = true;
       this.winner = undefined;
-      if (this.selected.length > 0) {
-        this.processing = true;
-        setTimeout(
-          () => {
-            const randomIndex = Math.floor(Math.random() * this.selected.length);
-            this.winner = this.selected[randomIndex];
-            this.processing = false;
-          },
-          7000,
-        );
-      }
+      this.processing = true;
+      setTimeout(
+        () => {
+          const randomIndex = Math.floor(Math.random() * this.screams.length);
+          this.winner = this.screams[randomIndex];
+          this.processing = false;
+        },
+        7000,
+      );
     },
   },
 };
@@ -103,7 +91,7 @@ export default {
   flex-direction: column;
   padding: 2em;
   min-height: 20em;
-  min-width: 70em;
+  max-width: 65em;
 }
 .scream {
   display: flex;
@@ -111,12 +99,9 @@ export default {
   align-items: center;
   padding: 0.5em;
   margin: 0.5em;
-  // border: 0.5em var(--primary-color) solid;
-  cursor: pointer;
   transition: transform 3s infinte;
   font-family: 'Dancing Script', cursive;
-  opacity: 0.15;
-  font-size: 2em;
+  font-size: 2.2em;
 }
 .selector {
   display: flex;
@@ -125,7 +110,6 @@ export default {
   justify-content: center;
 }
 .selected {
-  opacity: 1;
   // border: 0.5em var(--light-primary-color-30) solid;
   text-decoration: underline;
 }

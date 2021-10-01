@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import settings from '@/utils/settings.js';
 
 export default {
   name: 'CeremonySettings',
@@ -45,9 +44,6 @@ export default {
   computed: {
     days() {
       return moment.weekdays(true).splice(0, 5);
-    },
-    members() {
-      return settings.members;
     },
   }
 };

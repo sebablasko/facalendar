@@ -9,20 +9,24 @@
             :class="$style.noItem">
             <img :class="$style.beachPhoto" :src="beach"/>
             <span>¡Ningún RC's! Qué vergüenza...</span>
-            <a href="#" @click="show = true">Ver feature branches</a>
           </div>
           <div
             v-for="r in rcs"
             :key="r.name"
             :class="$style.item">
-            <b>{{ r.name }}</b>
+            <div :class="$style.repoName">
+              <b>{{ r.name }}</b> <i>pasa a v{{ getVersion(r) }}</i>
+            </div>
             <div :class="$style.details">
-              <span :class="$style.started">Iniciado {{ r.started }}</span>
+              <span :class="$style.started">Iniciado {{ r.started.from(selectedDate) }}</span>
               <div :class="$style.links">
-                <a href="#">TP-52356</a>
-                <a href="#">Link QA</a>
+                <a :href="TPLink(r)">{{ r.branch.split('/')[1] }}</a>
+                <a :href="demoLink(r)">Link QA</a>
               </div>
             </div>
+          </div>
+          <div :class="$style.branches">
+             <a href="#" @click="show = true">Ver todas las feature branches</a>
           </div>
         </div>
       </template>
@@ -49,14 +53,16 @@
 </template>
 
 <script>
+import moment from 'moment';
 import FerryIcon from 'vue-material-design-icons/Ferry.vue';
+import { mapState } from 'vuex';
 
 import Card from '@/components/Card';
 import Branches from '@/components/Branches'
 import beach from '@/assets/beach.png';
 
 export default {
-  name: 'Widgets',
+  name: 'Releases',
   components: {
     Card,
     Branches,
@@ -66,14 +72,36 @@ export default {
     return {
       show: false,
       beach,
-      rcs: [
-        // { name: 'investment-advice-widget', started: 'hoy' },
-      ],
     };
   },
   methods: {
+    getVersion(rc) {
+      return rc.branch.split('/')[2];
+    },
+    TPLink(rc) {
+      const tpId = rc.branch.split('/')[1].split('-')[1];
+      return `https://principaldx.tpondemand.com/entity/${tpId}`;
+      
+    },
+    demoLink(rc) {
+      const { name } = rc;
+      const version = this.getVersion(rc);
+      return `http://static.qa.cloud.principal.cl/${name}/${version}/index.html`;
+    },
   },
   computed: {
+    ...mapState(['prs', 'selectedDate']),
+    rcs() {
+      return Object
+        .keys(this.prs)
+        .filter(x => this.prs[x] && this.prs[x].length > 0)
+        .filter(x => this.prs[x].some(y => y.branch.name.includes('rc') && !y.branch.name.includes('urc')))
+        .map(x => ({
+          name: x,
+          started: moment(this.prs[x].find(y => y.branch.name.includes('rc') && !y.branch.name.includes('urc')).created_on),
+          branch: this.prs[x].find(y => y.branch.name.includes('rc') && !y.branch.name.includes('urc')).branch.name,
+        }));
+    },
   },
 };
 </script>
@@ -108,6 +136,11 @@ export default {
   margin-bottom: 0.3em;
   padding-left: 0.3em;
 }
+.repoName {
+  & *:last-child {
+    font-size: 0.8em;
+  }
+}
 .details {
   display: flex;
   flex-direction: row;
@@ -123,7 +156,11 @@ export default {
   flex: 1;
   justify-content: space-around;
 }
-
+.branches {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 .modal {
   position: fixed;
   top: 0;

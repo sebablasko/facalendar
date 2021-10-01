@@ -10,7 +10,7 @@
         $style.day,
         d.date.isBefore(today, 'date') && $style.past,
         d.date.isSame(today, 'date') && $style.today,
-        d.date.isSame(selected, 'date') && $style.selected,
+        d.date.isSame(selectedDate, 'date') && $style.selected,
         feriados.some(f => d.date.isSame(f.fecha, 'day')) && !d.date.isBefore(today, 'date') && $style.feriado,
         [0, 6].includes(d.date.day()) && $style.weekend,
       ]"
@@ -26,21 +26,20 @@
 
 <script>
 import moment from 'moment';
+import { mapState } from 'vuex';
+
 import feriados from '@/utils/feriados.js';
 
 export default {
   name: 'MonthLine',
   props: {
-    selected: {
-      type: Object,
-      default: () => moment(),
-    },
     dates: {
       type: Array,
       default: () => [],
     },
   },
   computed: {
+    ...mapState(['selectedDate']),
     today() {
       return moment();
     },
@@ -152,7 +151,6 @@ export default {
   padding: 0 0.1em;
   font-weight: bold;
   display: flex;
-  display: none;
   justify-content: center;
   align-items: center;
 }

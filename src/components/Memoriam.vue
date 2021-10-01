@@ -20,46 +20,22 @@
 </template>
 
 <script>
-import Card from "@/components/Card";
-import pameImg from '@/assets/pame.jpeg';
-import alexImg from '@/assets/alex.jpeg';
-import aleImg from '@/assets/ale.jpeg';
-import ariImg from '@/assets/ari.jpeg';
-import leonImg from '@/assets/leon.jpeg';
-import cinthiaImg from '@/assets/cinthia.jpeg';
-import seba3Img from '@/assets/seba3.jpeg';
-import armandoImg from '@/assets/armando.jpeg';
-import practicarlosImg from '@/assets/practicarlos.jpeg';
-import nicoImg from '@/assets/nico.jpeg';
-import agueroImg from '@/assets/aguero.jpeg';
+import { mapState } from 'vuex';
+
 import forest from '@/assets/forest4.mp3';
 
 export default {
   name: "Memoriam",
-  components: {
-    Card,
-  },
-  methods: {
-  },
   data() {
     return {
       f: undefined,
-      members: [
-        { id: 'pame', name: 'Pame', img: pameImg },
-        { id: 'alex', name: 'Alex', img: alexImg },
-        { id: 'ale', name: 'Ale', img: aleImg },
-        { id: 'ari', name: 'Ari', img: ariImg },
-        { id: 'armando', name: 'Armando', img: armandoImg },
-        { id: 'cinthia', name: 'Cinthia', img: cinthiaImg },
-        { id: 'leon', name: 'León', img: leonImg },
-        { id: 'practicarlos', name: 'Carlos el practicante', img: practicarlosImg },
-        { id: 'nico', name: 'Nico', img: nicoImg, birthday: '26/05' },
-        { id: 'gallardo', name: 'Seba G', img: seba3Img, birthday: '09/08' },
-        { id: 'awero', name: 'Andrés', img: agueroImg, birthday: '06/03' },
-      ],
     };
   },
   computed: {
+    ...mapState(['remote']),
+    members() {
+      return this.remote.memoriam;
+    },
   },
   mounted() {
     this.f= new Audio(forest);

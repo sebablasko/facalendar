@@ -43,14 +43,14 @@ import WidgetsIcon from 'vue-material-design-icons/WidgetsOutline.vue';
 import Card from '@/components/Card';
 import Picker from '@/components/Picker'
 import Screams from '@/components/Screams'
-import Settings from '@/components/Settings'
+// import Settings from '@/components/Settings'
 import Memoriam from '@/components/Memoriam'
 
 const widgetsAvailable = [
   { name: 'Chuasi', component: Picker, new: false, scrolleable: false, disabled: false },
-  { name: 'Gritos', component: Screams, new: false, scrolleable: true, disabled: false },
-  { name: 'Settings', component: Settings, new: false, scrolleable: true, disabled: false },
-  { name: 'In Memoriam', component: Memoriam, new: true, scrolleable: false, disabled: false },
+  { name: 'Gritos', component: Screams, new: true, scrolleable: true, disabled: false },
+  // { name: 'Settings', component: Settings, new: false, scrolleable: true, disabled: false },
+  { name: 'In Memoriam', component: Memoriam, new: false, scrolleable: false, disabled: false },
 ];
 
 export default {
@@ -106,9 +106,9 @@ export default {
   padding: 0.3em;
   font-size: 1.1em;
   position: relative;
-  border: 2px solid var(--dark-primary-color-10);
+  border: 2px solid var(--dark-primary-color-30);
   &:hover {
-    background-color: var(--dark-primary-color-10);
+    background-color: var(--dark-primary-color-30);
   }
 }
 .new {
@@ -119,7 +119,7 @@ export default {
     top: -0.3em;
     right: 0.1em;
     padding: 0 3px;
-    background-color: var(--dark-primary-color-20);
+    background-color: var(--dark-primary-color-30);
     line-height: 1em;
   }
 }

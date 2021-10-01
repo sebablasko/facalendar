@@ -85,9 +85,8 @@
 
 <script>
 import moment from 'moment';
-import settings from '@/utils/settings.js';
-import store from '@/store.js'
 import axios from 'axios';
+import { mapGetters } from 'vuex';
 
 import CeremonySettings from '@/components/CeremonySettings';
 
@@ -104,17 +103,15 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['members']),
     days() {
       return moment.weekdays(true).splice(0, 5).map(x => x.substring(0, 3));
-    },
-    members() {
-      return settings.members;
-    },
+    },    
   },
   methods: {
     reset() {
-      this.teams = JSON.parse(JSON.stringify(store.settings)).teams;
-      this.commonCeremonies =  JSON.parse(JSON.stringify(store.settings)).globalCeremonies;
+      // this.teams = JSON.parse(JSON.stringify(store.settings)).teams;
+      // this.commonCeremonies =  JSON.parse(JSON.stringify(store.settings)).globalCeremonies;
     },
     toggeMember(teamId, ceremonyName, memberId) {
       const participans = this.teams
@@ -151,7 +148,7 @@ export default {
       };
       axios.post('https://users.dcc.uchile.cl/~sblasco/facalendar/', payload)
         .then((x) => {
-          store.settings = x.data;
+          // store.settings = x.data;
           this.$emit('refresh');
         });
     },

@@ -26,21 +26,21 @@
 </template>
 
 <script>
-import moment from 'moment';
-import settings from '@/utils/settings.js';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Picker',
   data() {
     return {
-      members: settings.members,
       selectedMembers: [],
       winner: undefined,
       processing: false,
     };
   },
+  computed: {
+    ...mapGetters(['members']),
+  },
   methods: {
-    moment,
     toggle(name) {
       this.winner = undefined;
       if (this.selectedMembers.includes(name)) {
@@ -103,7 +103,6 @@ export default {
   border: 0.5em var(--light-primary-color-30) solid;
 }
 .procesing {
-  // animation: spin 14s;
   animation: square 7s linear infinite alternate;
 }
 @keyframes spin {
@@ -159,11 +158,4 @@ export default {
     opacity: 1;
   }
 }
-
-// @for $i from 1 through 9 {
-//   .procesing:nth-child(#{$i}){
-//     animation-delay: ($i * -.15s);
-//     transform: translateZ($i * 20px);
-//   }
-// }
 </style>

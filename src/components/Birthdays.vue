@@ -10,20 +10,20 @@
           :key="index"
           :class="[
             $style.item,
-            moment(mem.birthday, 'DD/MM').isBefore(selected, 'day') && $style.past,
+            moment(mem.birthday, 'DD/MM').isBefore(selectedDate, 'day') && $style.past,
             ]">
           <div :class="[
             $style.photoDiv,
-            moment(mem.birthday, 'DD/MM').isSame(selected, 'day') && $style.birthday,
+            moment(mem.birthday, 'DD/MM').isSame(selectedDate, 'day') && $style.birthday,
             ]">
             <img :class="$style.photo" :src="mem.img"/>
           </div>
           <div :class="$style.info">
             <div :class="$style.infoBig">
               {{
-                moment(mem.birthday, 'DD/MM').isSame(selected, 'day')
+                moment(mem.birthday, 'DD/MM').isSame(selectedDate, 'day')
                 ? '¡Es Hoy! :D'
-                : moment(mem.birthday, 'DD/MM').add(1, 'd').from(selected)
+                : moment(mem.birthday, 'DD/MM').add(1, 'd').from(selectedDate)
               }}
             </div>
             <div :class="$style.infoSmall">
@@ -40,10 +40,11 @@
 
 <script>
 import moment from 'moment';
+import { mapGetters, mapState } from 'vuex';
+
 import CakeVariantOutlineIcon from 'vue-material-design-icons/CakeVariantOutline.vue';
 
 import Card from '@/components/Card';
-import settings from '@/utils/settings.js';
 
 export default {
   name: 'Birthdays',
@@ -51,24 +52,12 @@ export default {
     Card,
     CakeVariantOutlineIcon,
   },
-  props: {
-    selected: {
-      type: Object,
-      default: () => moment(),
-    },
-  },
   computed: {
+    ...mapState(['selectedDate']),
+    ...mapGetters(['members']),
   },
   methods: {
     moment,
-  },
-  data() {
-    return {
-      members: [
-        ...settings.members,
-      ]
-        .sort((a,b) => moment(a.birthday, 'DD/MM').format('YYYYMMDD') - moment(b.birthday, 'DD/MM').format('YYYYMMDD')),
-    };
   },
   created() {
     moment.locale('es');
@@ -118,11 +107,11 @@ export default {
     left: 0.3em;
     top: -1.9em;
     z-index: 1;
-    animation: blink 1s infinite;
+    animation: dance 1s infinite;
   }
 }
 .photo {
-  border-radius: 10%;
+  border-radius: 50%;
   width: 3em;
   box-shadow: 0 0.1px 0.1em gray;
 }
@@ -148,11 +137,11 @@ export default {
   flex-direction: column;
   justify-content: center;
   line-height: 1em;
-  background-color: var(--dark-primary-color-20);
+  background-color: var(--dark-primary-color-30);
   transition: background-color 0.5s linear;
   padding: 2px 7px;
 }
-@keyframes blink{
+@keyframes dance{
   0%{
     transform: scale(1.05) rotate(10deg);
   }

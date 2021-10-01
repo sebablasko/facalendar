@@ -30,6 +30,8 @@
 
 <script>
 import axios from 'axios';
+import { mapState } from 'vuex';
+
 import beach from '@/assets/beach.png';
 
 export default {
@@ -40,6 +42,9 @@ export default {
       beach,
       loading: true,
     };
+  },
+  computed: {
+    ...mapState(['selectedTeam', 'remote']),
   },
   methods: {
     isQa(branch) {
@@ -56,14 +61,16 @@ export default {
   },
   mounted() {
     this.loading = true;
+    const { repos } = this.remote.teams.find(x => x.id === this.selectedTeam);
     axios
-      .get('https://users.dcc.uchile.cl/~sblasco/bt/index.php')
+      .get(`https://users.dcc.uchile.cl/~sblasco/facalendar2/branches.php?repo=${repos.map(x => x.name).join(',')}`)
       .then(result => {
         this.loading = false;
-        this.branches = Object.keys(result.data).map(r => ({
-          title: r,
-          links: result.data[r].filter((x) => !['released', 'unreleased'].includes(x)),
-        }));
+        this.branches = Object.keys(result.data)
+          .map(r => ({
+            title: r,
+            links: (result.data[r] || []).filter((x) => !['released', 'unreleased'].includes(x)),
+          }));
       });
   },
 };
