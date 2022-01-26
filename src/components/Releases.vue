@@ -20,8 +20,8 @@
             <div :class="$style.details">
               <span :class="$style.started">Iniciado {{ r.started.from(selectedDate) }}</span>
               <div :class="$style.links">
-                <a :href="TPLink(r)">{{ r.branch.split('/')[1] }}</a>
-                <a :href="demoLink(r)">Link QA</a>
+                <a target="_blank" :href="TPLink(r)">{{ r.branch.split('/')[1] }}</a>
+                <a target="_blank" v-if="r.isFront" :href="demoLink(r)">Link QA</a>
               </div>
             </div>
           </div>
@@ -94,10 +94,11 @@ export default {
     rcs() {
       return Object
         .keys(this.prs)
-        .filter(x => this.prs[x] && this.prs[x].length > 0)
         .filter(x => this.prs[x].some(y => y.branch.name.includes('rc') && !y.branch.name.includes('urc')))
+        .filter(x => this.prs[x] && this.prs[x].length > 0)
         .map(x => ({
           name: x,
+          // isFront: this.prs[x].isFront, TODO: FIX
           started: moment(this.prs[x].find(y => y.branch.name.includes('rc') && !y.branch.name.includes('urc')).created_on),
           branch: this.prs[x].find(y => y.branch.name.includes('rc') && !y.branch.name.includes('urc')).branch.name,
         }));

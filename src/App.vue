@@ -9,7 +9,8 @@
     <day-header/>
     <month-line
       :dates="month"
-      @select="selectDate"/>
+      @select="selectDate"
+      @month="selectMonth"/>
     <div :class="$style.general">
       <div :class="$style.primary">
         <ceremonies/>
@@ -87,13 +88,16 @@ export default {
       selectedDate: 'selectedDate',
       remote: 'remote',
     }),
-    ...mapGetters(['ceremonies', 'members', 'colors']),
+    ...mapGetters(['ceremonies', 'members', 'colors', 'month']),
     month() {
       const monthEvents = [
         // { day: 5, week: 'SECOND', name: 'Retro' },
         { day: 4, week: 'THIRD', name: '1 a 1' },
         { day: 4, week: 'LAST', name: 'Expectativa vs Realidad' },
       ];
+      //const monthEvents = this.selectedTeam
+      //  ? [...this.remote.teams.find(x => x.id === this.selectedTeam).ceremonies]
+      //  : [];
       const validateOccurrency = (event, checkingDate) => {
         let firstWeek = moment(checkingDate).set('date', 1);
         while (firstWeek.day() != event.day) {
@@ -143,6 +147,9 @@ export default {
     },
     selectDate(date){
       this.setCurrentDate(moment(date));
+    },
+    selectMonth(delta) {
+      this.setCurrentDate(moment(this.selectedDate).add(delta, 'months'));
     },
     startConfetti(teamId) {
       const particles = this.remote.teams

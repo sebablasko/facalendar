@@ -86,7 +86,7 @@ export default {
   100% { opacity: 1; }
 }
 $animationDelay: 1;
-@for $i from 1 through 11 {
+@for $i from 1 through 12 {
 	.item:nth-of-type(#{$i}) {
 		animation-delay: #{1+($i)}s;
   }

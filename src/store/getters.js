@@ -62,4 +62,11 @@ export default {
       dark30: shadeColor(color, -15),
     };
   },
+  [types.getters.MONTH]: (state) => {
+    return [...(
+      state.selectedTeam
+        ? state.remote.teams.find(x => x.id === state.selectedTeam).month
+        : []
+    )];
+  },
 };

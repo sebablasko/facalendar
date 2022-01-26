@@ -16,5 +16,6 @@ export default {
     CEREMONIES: 'ceremonies',
     MEMBERS: 'members',
     COLORS: 'colors',
+    MONTH: 'month',
   },
 };

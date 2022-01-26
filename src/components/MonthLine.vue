@@ -2,7 +2,7 @@
   <div :class="$style.content">
     <div
       :class="[$style.day, $style.control]"
-      @click="$emit('previousMonth')"><</div>
+      @click="$emit('month', -1)"><</div>
     <div
       v-for="(d, i) in dates" 
       :key="`${i}-d`"
@@ -20,7 +20,7 @@
     </div>
     <div
       :class="[$style.day, $style.control]"
-      @click="$emit('nextMonth')">></div>
+      @click="$emit('month', 1)">></div>
   </div>
 </template>
 
