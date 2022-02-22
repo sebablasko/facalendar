@@ -45,12 +45,16 @@ import Picker from '@/components/Picker'
 import Screams from '@/components/Screams'
 // import Settings from '@/components/Settings'
 import Memoriam from '@/components/Memoriam'
+import Holidays from '@/components/Holidays'
+import Links from '@/components/Links'
 
 const widgetsAvailable = [
   { name: 'Chuasi', component: Picker, new: false, scrolleable: false, disabled: false },
-  { name: 'Gritos', component: Screams, new: true, scrolleable: true, disabled: false },
+  { name: 'Gritos', component: Screams, new: false, scrolleable: true, disabled: false },
   // { name: 'Settings', component: Settings, new: false, scrolleable: true, disabled: false },
   { name: 'In Memoriam', component: Memoriam, new: false, scrolleable: false, disabled: false },
+  { name: 'Vacaciones', component: Holidays, new: true, scrolleable: true, disabled: false },
+  { name: 'Links', component: Links, new: true, scrolleable: true, disabled: false },
 ];
 
 export default {
@@ -89,7 +93,6 @@ export default {
 }
 .links {
   display: flex;
-  flex: 1;
   flex-direction: row;
   flex-wrap: wrap;
   transition: all 0.5s linear;
@@ -100,11 +103,11 @@ export default {
   cursor: pointer;
   display: flex;
   flex: 1;
+  min-width: 5em;
   align-items: center;
   justify-content: center;
   margin: 7px;
   padding: 0.3em;
-  font-size: 1.1em;
   position: relative;
   border: 2px solid var(--dark-primary-color-30);
   &:hover {

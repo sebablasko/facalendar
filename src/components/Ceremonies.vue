@@ -98,12 +98,10 @@ export default {
   flex: 1;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
 }
 .ceremony {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   flex: 1;
   margin-top: 0.5em;
@@ -171,6 +169,7 @@ export default {
   border-radius: 50%;
   width: 6em;
   box-shadow: 0 0 1em 8px var(--dark-primary-color-30);
+  border: 0.2em solid var(--light-primary-color-20);
 }
 .beachPhoto {
   width: 7em;
@@ -209,6 +208,8 @@ export default {
 .group {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .groupItem {
   display: flex;

@@ -16,7 +16,7 @@
             $style.photoDiv,
             moment(mem.birthday, 'DD/MM').isSame(selectedDate, 'day') && $style.birthday,
             ]">
-            <img :class="$style.photo" :src="mem.img"/>
+            <img :class="$style.photo" :src="mem.img" :alt="mem.id" :title="mem.name"/>
           </div>
           <div :class="$style.info">
             <div :class="$style.infoBig">
@@ -84,7 +84,7 @@ export default {
 .photoDiv {
   margin: 0;
   padding: 0;
-  width: 3em;
+  width: 3.5em;
   height: 2.95em;
 }
 .past {
@@ -103,7 +103,7 @@ export default {
     display: block;
     position: absolute;
     height: 3em;
-    width: 3em;
+    width: 3.5em;
     left: 0.3em;
     top: -1.9em;
     z-index: 1;
@@ -112,8 +112,10 @@ export default {
 }
 .photo {
   border-radius: 50%;
-  width: 3em;
+  width: 3.5em;
   box-shadow: 0 0.1px 0.1em gray;
+  border: 0.2em solid var(--light-primary-color-20);
+  box-sizing: border-box;
 }
 .info {
   display: flex;
@@ -127,8 +129,9 @@ export default {
   box-shadow: 0 0.2px 0.001em gray;
 }
 .infoBig {
-  font-size: 0.75em;
+  font-size: 0.6em;
   line-height: 1em;
+  padding: 0 0.25em;
 }
 .infoSmall {
   display: flex;
