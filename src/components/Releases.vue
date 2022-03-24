@@ -94,7 +94,7 @@ export default {
     rcs() {
       return Object
         .keys(this.prs)
-        .filter(x => this.prs[x].some(y => y.branch.name.includes('rc') && !y.branch.name.includes('urc')))
+        .filter(x => this.prs[x].some(y => y.branch.name.includes('rc/') && !y.branch.name.includes('urc')))
         .filter(x => this.prs[x] && this.prs[x].length > 0)
         .map(x => ({
           name: x,

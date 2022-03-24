@@ -6,13 +6,21 @@
         <div :class="$style.links">
           <span
             v-for="(w, index) in widgetsAvailable"
-            :key="index"
+            :key="`${index}-widget`"
             :class="[
               $style.link,
               w.new && $style.new,
               w.disabled && $style.disabled,
             ]"
             @click="!w.disabled && select(index)">{{ w.name }}</span>
+          <span
+            v-for="(w, index) in teamLinks"
+            :key="`${index}-external`"
+            :class="[
+              $style.link,
+              $style.external,
+            ]"
+            @click="openLink(w.url)">{{ w.title }}</span>
         </div>
       </template>
     </card>
@@ -38,6 +46,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import WidgetsIcon from 'vue-material-design-icons/WidgetsOutline.vue';
 
 import Card from '@/components/Card';
@@ -53,7 +62,7 @@ const widgetsAvailable = [
   { name: 'Gritos', component: Screams, new: false, scrolleable: true, disabled: false },
   // { name: 'Settings', component: Settings, new: false, scrolleable: true, disabled: false },
   { name: 'In Memoriam', component: Memoriam, new: false, scrolleable: false, disabled: false },
-  { name: 'Vacaciones', component: Holidays, new: true, scrolleable: true, disabled: false },
+  { name: 'Vacaciones', component: Holidays, new: false, scrolleable: true, disabled: false },
   { name: 'Links', component: Links, new: true, scrolleable: true, disabled: false },
 ];
 
@@ -74,8 +83,20 @@ export default {
     select(index) {
       this.selected = index;
     },
+    openLink(url) {
+      window.open(url, '_blank');
+    },
   },
   computed: {
+    ...mapState({
+      selectedTeam: 'selectedTeam',
+      remote: 'remote',
+    }),
+    teamLinks() {
+      return this.selectedTeam
+        ? [...this.remote.teams.find(x => x.id === this.selectedTeam).links]
+        : [];
+    },
     currentComponent() {
       if (this.selected !== undefined) {
         return widgetsAvailable[this.selected];
@@ -140,6 +161,18 @@ export default {
   }
   &:hover {
     background-color: var(--primary-color);
+  }
+}
+.external {
+  &::after {
+    content: 'External';
+    position: absolute;
+    font-size: 0.8em;
+    top: -0.3em;
+    right: 0.1em;
+    padding: 0 3px;
+    background-color: var(--light-primary-color-20);
+    line-height: 1em;
   }
 }
 .modal {

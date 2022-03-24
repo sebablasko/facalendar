@@ -73,6 +73,16 @@ export default {
           title: 'VCS DevOps',
           description: 'Repositorio de administracion de despliegues de piezas backend',
         },
+        {
+          url: 'https://app.whitesourcesoftware.com/Wss/WSS.html#!home',
+          title: 'Whitesource',
+          description: 'Herramienta para detectar riesgos de seguridad en las dependencias de tu proyecto',
+        },
+        {
+          url: 'https://ssc.sast.principal.com/ssc/html/ssc/dashboard/Issue%20Stats',
+          title: 'Fortify',
+          description: 'Herramienta para detectar problemas de seguridad en tu proyecto',
+        },
       ],
     };
   },
